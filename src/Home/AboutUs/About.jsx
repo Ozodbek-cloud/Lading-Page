@@ -18,8 +18,10 @@ import profile from "../../img/ronaldo-wallpaper-3.jpg"
 import img6 from "../../img/0004.jpg"
 import img7 from "../../img/0006.jpg"
 import img8 from "../../img/027.jpg"
+import axios from 'axios'
 export default function About() {
   const [showProgress, setProgres] = useState(true)
+  const [mentor, setMentors] = useState([])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -28,6 +30,13 @@ export default function About() {
     return () => clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    axios.get('https://edora-backend.onrender.com/users/mentors')
+      .then(res => {
+        setMentors(res.data.data)
+      })
+  }, [])
+  console.log(mentor)
 
   const [dark, setDarkMode] = useState(false)
   return (
@@ -137,18 +146,23 @@ export default function About() {
           <section className='mt-[120px] max-w-[1120px] mx-auto flex flex-col gap-5 items-center text-center'>
             <h1 className='text-5xl font-bold'>Tajribali Mentorlar</h1>
             <p className='mt-2 text-[20px]'>Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan</p>
-            <div className='flex gap-5'>
-              {[1, 2, 3, 4].map((_, i) => (
-                <div key={i} className="relative h-[400px] w-[250px] rounded-3xl overflow-hidden group">
-                  <img src={profile} alt="" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all"></div>
-                  <div className="absolute bottom-[-120px] left-1/2 -translate-x-1/2 w-[90%] py-4 bg-gray-800/90 rounded-xl text-white text-center transition-all duration-500 group-hover:bottom-6">
-                    <h2 className="font-bold text-lg">Mentor Name</h2>
-                    <p className="text-sm">Developer</p>
+            <div className='flex gap-5 flex-wrap justify-center'>
+              {mentor.length > 0 ? (
+                mentor.map((el, i) => (
+                  <div key={i} className="relative h-[400px] w-[250px] rounded-3xl overflow-hidden group">
+                    <img src={el.image} alt={el.fullName} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all"></div>
+                    <div className="absolute bottom-[-120px] left-1/2 -translate-x-1/2 w-[90%] py-4 bg-gray-800/90 rounded-xl text-white text-center transition-all duration-500 group-hover:bottom-6">
+                      <h2 className="font-bold text-lg">{el.fullName}</h2>
+                      <p className="text-sm">{el.role}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-gray-500">Mentorlar hozircha mavjud emas</p>
+              )}
             </div>
+
           </section>
         </div>
 

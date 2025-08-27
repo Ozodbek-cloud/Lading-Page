@@ -158,8 +158,6 @@ export default function Main() {
                             Barcha Kurslar
                         </Button>
                         <Button
-
-                            to="/turn"
                             variant="contained"
                             sx={{
                                 backgroundColor: "#3B82F6",

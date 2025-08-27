@@ -1,20 +1,22 @@
 import { Link } from 'react-router-dom'
 import logo_dark from "../../img/logo-dark.svg"
-import { Button } from '@mui/material'
 import logo_white from "../../img/logo (1).svg"
+import { Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import moon from "../../img/moon.png"
 import sun from "../../img/sun.png"
 import play from "../../img/play.png"
-import python from "../../img/pbf_fd37e99b-5b08-4e7f-b4af-595bb64707bf.png"
-import foundation from "../../img/pbf_e6f6d199-accf-4f46-bb94-449c4997686e.png"
-import user from "../../img/avatar-3.webp"
-import user2 from "../../img/avatar-5.webp"
+import axios from 'axios'
 
 export default function Course() {
     const [showProgress, setProgres] = useState(true)
+    const [courses, setCourses] = useState([])
+    const [category, setCategory] = useState("all")
+    const [categorys, setCategorys] = useState([])
+    const [filteredCourses, setFilteredCourses] = useState([])
+    const [dark, setDarkMode] = useState(false)  
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -23,12 +25,27 @@ export default function Course() {
         return () => clearInterval(timer)
     }, [])
 
+    useEffect(() => {
+        axios.get('https://edora-backend.onrender.com/courses')
+            .then(data => setCourses(data.data.data))
+        axios.get('https://edora-backend.onrender.com/course-category/getAll')
+            .then(data => setCategorys(data.data))
+    }, [category])
 
-    const [dark, setDarkMode] = useState(false)
+
+    function search(categoryId) {
+        if (categoryId === "all") {
+            setFilteredCourses(courses);
+        } else {
+            let filteredCourse = courses.filter(el => el.category.id === categoryId);
+            setFilteredCourses(filteredCourse);
+        }
+    }
+
     return (
         <div className={dark ? "bg-[#0f172a] text-white" : "bg-white text-black"}>
+            {/* Navbar */}
             <header>
-                {/* Navbar Section */}
                 <section className={`max-w-[1920px] shadow-md fixed top-0 left-0 w-full z-[999] backdrop-blur-[40px] ${dark ? "bg-[#101828] text-white" : "bg-white/70 text-black"}`}>
                     {showProgress && (
                         <Box sx={{ width: "100%" }} className="absolute">
@@ -38,7 +55,7 @@ export default function Course() {
                     <div className='max-w-[1120px] mx-auto'>
                         <nav className='flex justify-between items-center py-5 mx-auto'>
                             <div className='flex items-center gap-10'>
-                                <img src={dark ? logo_white : logo_dark} alt="" />
+                                <img src={dark ? logo_white : logo_dark} alt="logo" />
                                 <ul className='flex gap-5'>
                                     <li className=' hover:text-blue-500 transition-all duration-300'>
                                         <Link to="/">Asosiy</Link>
@@ -76,171 +93,85 @@ export default function Course() {
                                 >
                                     Kirish
                                 </Button>
-
                             </div>
                         </nav>
                     </div>
                 </section>
             </header>
 
+            {/* Main */}
             <main className='pt-20'>
                 <section className='max-w-[1120px] mx-auto mt-[60px] text-center gap-5 flex flex-col'>
                     <div className='flex justify-between'>
                         <h1 className='text-5xl font-bold '>Kurslar</h1>
                     </div>
+
+                    {/* Category filter */}
                     <div className='flex gap-4 mt-5 justify-center'>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Barcha Kurslar
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Fronted
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Backend
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Foundation
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Mobil
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            IT Matematika
-                        </Button>
-
+                        {categorys.map(el => (
+                            <Button
+                                key={el.id}
+                                onClick={() => search(el.id)}
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: "#3B82F6",
+                                    borderRadius: "10px",
+                                    color: "white",
+                                    padding: "8px 32px",
+                                    fontWeight: "bold",
+                                    textTransform: "none",
+                                    "&:hover": {
+                                        backgroundColor: "#2563EB",
+                                    }
+                                }}
+                            >
+                                {el.name}
+                            </Button>
+                        ))}
                     </div>
-                    <div className='mt-[30px] flex-col justify-start items-start md:flex-row  flex gap-10'>
-                        <div className='shadow-[0px_0px_6px_5px_rgba(0,_0,_0,_0.1)] rounded-[5px]'>
-                            <img src={python} alt="" className='w-88 rounded-[5px]' />
-                            <div className='flex  items-center px-3 py-3 gap-2'>
-                                <img src={user} alt="" className='rounded-[50%] w-9' />
-                                <p className='font-bold'>Ergashev Abdulla</p>
-                            </div>
-                            <div className='flex justify-start px-3 flex-col items-start gap-2'>
-                                <h1 className='text-2xl font-serif font-bold'>PHP LARAVEL</h1>
-                                <div className='flex justify-between items-center  w-82'>
-                                    <p className='text-gray-600 font-bold'>Chegirma:</p>
-                                    <p className='text-[18px] font-bold'>60%</p>
-                                </div>
-                                <div className='flex justify-start items-start flex-col gap-2'>
-                                    <p className='text-gray-600 font-bold'>Kurs Narxi:</p>
-                                    <div className='flex justify-between items-center w-82 pb-8'>
-                                        <del className='text-[18px] text-gray-600 font-bold'>997500<sub>uzs</sub> </del>
 
-                                        <p className='text-[22px] font-bold'>399000 <sub>uzs</sub></p>
+                    {/* Courses */}
+                    <div className="mt-[30px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+                        {(filteredCourses.length > 0 ? filteredCourses : courses).map(el => (
+                            <div key={el._id} className="shadow-[0px_0px_6px_5px_rgba(0,_0,_0,_0.1)] rounded-[5px]">
+                                <div>
+                                    <img
+                                        src={`https://edora-backend.onrender.com/uploads/banner/${el.banner}`}
+                                        alt={el.name}
+                                        className="w-full h-[200px] object-contain rounded-[5px]"
+                                    />
+                                </div>
+                                <div className="flex items-center px-3 py-3 gap-2">
+                                    <img
+                                        src={`https://edora-backend.onrender.com/uploads/mentors/${el.mentor.image}`}
+                                        alt={el.mentor.fullName}
+                                        className="rounded-full w-9 h-9 object-cover"
+                                    />
+                                    <p className="font-bold">{el.mentor.fullName}</p>
+                                </div>
+                                <div className="flex justify-start px-3 flex-col items-start gap-2">
+                                    <h1 className="text-2xl font-serif font-bold">{el.name}</h1>
+                                    <div className="flex justify-between items-center w-full">
+                                        <p className="text-gray-600 font-bold">Chegirma:</p>
+                                        <p className="text-[18px] font-bold">60%</p>
+                                    </div>
+                                    <div className="flex justify-start items-start flex-col gap-2">
+                                        <p className="text-gray-600 font-bold">Kurs Narxi:</p>
+                                        <div className="flex justify-between items-center w-[335px] pb-8">
+                                            <del className="text-[18px] text-gray-600 font-bold">
+                                                997500<sub>uzs</sub>
+                                            </del>
+                                            <p className="text-[22px] font-bold">
+                                                {el.price} <sub>uzs</sub>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className='shadow-[0px_0px_6px_5px_rgba(0,_0,_0,_0.1)] rounded-[5px]'>
-                            <img src={foundation} alt="" className='w-88 rounded-[5px]' />
-                            <div className='flex  items-center px-3 py-3 gap-2'>
-                                <img src={user2} alt="" className='rounded-[50%] w-9' />
-                                <p className='font-bold'>Safarov Oybek</p>
-                            </div>
-                            <div className='flex justify-start px-3 flex-col items-start gap-2'>
-                                <h1 className='text-2xl font-serif font-bold'>FOUNDATION</h1>
-                                <div className='flex justify-between items-center  w-82'>
-                                    <p className='text-gray-600 font-bold'>Chegirma:</p>
-                                    <p className='text-[18px] font-bold'>60%</p>
-                                </div>
-                                <div className='flex justify-start items-start flex-col gap-2'>
-                                    <p className='text-gray-600 font-bold'>Kurs Narxi:</p>
-                                    <div className='flex justify-between items-center w-82 pb-8'>
-                                        <del className='text-[18px] text-gray-600 font-bold'>747500<sub>uzs</sub> </del>
-
-                                        <p className='text-[22px] font-bold'>299000 <sub>uzs</sub></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        ))}
                     </div>
+
+                    {/* Load more */}
                     <div className='flex justify-center mt-[30px]'>
                         <Button
                             variant="contained"
@@ -259,7 +190,6 @@ export default function Course() {
                         </Button>
                     </div>
                 </section>
-
             </main>
 
             {/* Footer */}
@@ -268,7 +198,9 @@ export default function Course() {
                     <div className='flex flex-col gap-2 items-center'>
                         <img src={dark ? logo_white : logo_dark} alt="" />
                         <h2 className='text-2xl font-bold'>Biz bilan muvaffaqiyatga erishing</h2>
-                        <p className={`${dark ? "text-gray-400" : "text-gray-500"}`}>Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan</p>
+                        <p className={`${dark ? "text-gray-400" : "text-gray-500"}`}>
+                            Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan
+                        </p>
                         <div className='flex gap-5 mt-2'>
                             <button className={`p-2 rounded-[10px] px-8 font-bold flex gap-2 items-center ${dark ? "bg-white text-black" : "bg-white text-black border"} hover:opacity-50 transition-all duration-200`}>
                                 <img src={play} alt="" className='w-5' />
@@ -302,7 +234,6 @@ export default function Course() {
                     </div>
                 </section>
             </footer>
-            {/* Footer */}
         </div>
     )
 }
