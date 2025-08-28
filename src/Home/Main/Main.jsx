@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import python from "../../img/pbf_fd37e99b-5b08-4e7f-b4af-595bb64707bf.png"
 import foundation from "../../img/pbf_e6f6d199-accf-4f46-bb94-449c4997686e.png"
-import user from "../../img/avatar-3.webp"  
+import user from "../../img/avatar-3.webp"
 import user2 from "../../img/avatar-5.webp"
 import axios from 'axios'
 
@@ -25,7 +25,7 @@ export default function Main() {
     const [category, setCategory] = useState("all")
     const [categorys, setCategorys] = useState([])
     const [filteredCourses, setFilteredCourses] = useState([])
-
+    const [mentor, setMentors] = useState([])
     useEffect(() => {
         const timer = setInterval(() => {
             setProgres(false)
@@ -33,6 +33,12 @@ export default function Main() {
         return () => clearInterval(timer)
     }, [])
 
+    useEffect(() => {
+        axios.get('https://fn3.fixoo.uz/users/mentors')
+            .then(res => {
+                setMentors(res.data.data)
+            })
+    }, [])
 
     useEffect(() => {
         axios.get('https://fn3.fixoo.uz/courses')
@@ -290,7 +296,7 @@ export default function Main() {
                             </ul>
                             <Button
                                 component={Link}
-                                
+
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#3B82F6",
@@ -317,8 +323,8 @@ export default function Main() {
                             <h1 className='text-5xl font-bold text-white'>Istalgan nuqtadan onlayn<br />o’qish imkoniyati</h1>
                             <p className='font-bold text-white mt-2'>Biz sizga bu imkoniyatni taqdim qilamiz</p>
                             <Button
-                            component={Link}
-                                
+                                component={Link}
+
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#FFFFFF",
@@ -348,13 +354,13 @@ export default function Main() {
                     <h1 className='text-5xl font-bold'>Tajribali Mentorlar</h1>
                     <p className='mt-2 text-[20px]'>Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan</p>
                     <div className='flex gap-5'>
-                        {[1, 2, 3, 4].map((_, i) => (
+                        {mentor.map((el, i) => (
                             <div key={i} className="relative h-[400px] w-[250px] rounded-3xl overflow-hidden group">
-                                <img src={profile} alt="" className="w-full h-full object-cover" />
+                                <img src={`https://fn3.fixoo.uz/uploads/mentors/${el.image}`} alt="" className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all"></div>
                                 <div className="absolute bottom-[-120px] left-1/2 -translate-x-1/2 w-[90%] py-4 bg-gray-800/90 rounded-xl text-white text-center transition-all duration-500 group-hover:bottom-6">
-                                    <h2 className="font-bold text-lg">Mentor Name</h2>
-                                    <p className="text-sm">Developer</p>
+                                    <h2 className="font-bold text-lg">{el.fullName}</h2>
+                                    <p className="text-sm">{el.role}</p>
                                 </div>
                             </div>
                         ))}

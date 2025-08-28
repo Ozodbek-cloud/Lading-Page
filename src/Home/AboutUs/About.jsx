@@ -151,7 +151,7 @@ export default function About() {
               {mentor.length > 0 ? (
                 mentor.map((el, i) => (
                   <div key={i} className="relative h-[400px] w-[250px] rounded-3xl overflow-hidden group">
-                    <img src={el.image} alt={el.fullName} className="w-full h-full object-cover" />
+                    <img src={`https://fn3.fixoo.uz/uploads/mentors/${el.image}`} alt={el.fullName} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all"></div>
                     <div className="absolute bottom-[-120px] left-1/2 -translate-x-1/2 w-[90%] py-4 bg-gray-800/90 rounded-xl text-white text-center transition-all duration-500 group-hover:bottom-6">
                       <h2 className="font-bold text-lg">{el.fullName}</h2>
