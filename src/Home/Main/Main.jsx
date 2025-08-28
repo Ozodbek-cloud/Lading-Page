@@ -35,9 +35,9 @@ export default function Main() {
 
 
     useEffect(() => {
-        axios.get('https://edora-backend.onrender.com/courses')
+        axios.get('http://18.199.221.227:1709/courses')
             .then(data => setCourses(data.data.data))
-        axios.get('https://edora-backend.onrender.com/course-category/getAll')
+        axios.get('http://18.199.221.227:1709/course-category/getAll')
             .then(data => setCategorys(data.data))
     }, [category])
 
@@ -194,14 +194,14 @@ export default function Main() {
                                 <div key={el._id} className="shadow-[0px_0px_6px_5px_rgba(0,_0,_0,_0.1)] rounded-[5px]">
                                     <div>
                                         <img
-                                            src={`https://edora-backend.onrender.com/uploads/banner/${el.banner}`}
+                                            src={`http://18.199.221.227:1709/uploads/banner/${el.banner}`}
                                             alt={el.name}
                                             className="w-full h-[200px] object-contain rounded-[5px]"
                                         />
                                     </div>
                                     <div className="flex items-center px-3 py-3 gap-2">
                                         <img
-                                            src={`https://edora-backend.onrender.com/uploads/mentors/${el.mentor.image}`}
+                                            src={`http://18.199.221.227:1709/uploads/mentors/${el.mentor.image}`}
                                             alt={el.mentor.fullName}
                                             className="rounded-full w-9 h-9 object-cover"
                                         />

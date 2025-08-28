@@ -32,7 +32,7 @@ export default function About() {
   }, [])
 
   useEffect(() => {
-    axios.get('https://edora-backend.onrender.com/users/mentors')
+    axios.get('http://18.199.221.227:1709/users/mentors')
       .then(res => {
         setMentors(res.data.data)
       })
