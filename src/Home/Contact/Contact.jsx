@@ -30,7 +30,7 @@ function Contact() {
 
   async function post_Comment(e) {
     e.preventDefault()
-    let comment = await axios.post('https://edora-backend.onrender.com/api/contact', {
+    let comment = await axios.post('https://fn3.fixoo.uz/api/contact', {
       fullName: fullName,
       phone: phone,
       message: message
