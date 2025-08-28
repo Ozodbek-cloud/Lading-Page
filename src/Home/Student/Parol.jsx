@@ -49,8 +49,7 @@ export default function Parol() {
                             backgroundColor: "#3B82F6", borderRadius: "50px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
                                 backgroundColor: "#2563EB",
                             }
-                        }}
-                    >
+                        }} >
                         Kirish
                     </Button>
                     <div className='flex justify-end items-center'>
