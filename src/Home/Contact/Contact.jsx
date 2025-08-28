@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Box, IconButton, LinearProgress, Button } from '@mui/material'
-import { Alert, Snackbar } from '@mui/material'
+import { Box, LinearProgress, Button, Dialog, DialogContent, Typography, CircularProgress, IconButton } from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import ErrorIcon from '@mui/icons-material/Error'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import EmailIcon from '@mui/icons-material/Email'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
@@ -19,30 +20,53 @@ function Contact() {
   const [fullName, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [message, setMessage] = useState("")
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState(false)
+
+  const [modal, setModal] = useState({
+    open: false,
+    loading: false,
+    success: false,
+    error: ""
+  })
 
   useEffect(() => {
     const timer = setTimeout(() => setProgres(false), 1000)
     return () => clearTimeout(timer)
   }, [])
 
-
   async function post_Comment(e) {
     e.preventDefault()
-    let comment = await axios.post('https://fn3.fixoo.uz/api/contact', {
-      fullName: fullName,
-      phone: phone,
-      message: message
-    }).then(true)
-    setSuccess(true)
-    setError(false)
-      .catch(error => {
-        setError(true)
-        setSuccess(false)
-      })
-  }
 
+    if (!message.trim()) {
+      setModal({ open: true, loading: false, success: false, error: "Xabar yozilmadi!" })
+      return
+    }
+
+    setModal({ open: true, loading: true, success: false, error: "" })
+
+    try {
+      await axios.post('https://fn3.fixoo.uz/api/contact', {
+        fullName,
+        phone,
+        message
+      })
+      setModal({ open: true, loading: false, success: true, error: "" })
+      setName("")
+      setPhone("")
+      setMessage("")
+    } catch (err) {
+      setModal({
+        open: true,
+        loading: false,
+        success: false,
+        error: "Xabar yuborishda xatolik yuz berdi!"
+      })
+    } finally {
+      // 3 sekunddan keyin yopiladi
+      setTimeout(() => {
+        setModal({ open: false, loading: false, success: false, error: "" })
+      }, 3000)
+    }
+  }
 
   return (
     <div className={`${dark ? "bg-[#101828] text-white" : "bg-white text-black"}`}>
@@ -109,116 +133,108 @@ function Contact() {
           </div>
         </section>
 
-        {/* Contact Info Cards */}
-        <section className='relative z-10 max-w-[1150px] mx-auto mt-[40px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-          {/* Telefon */}
-          <div className='w-[350px] h-[200px] shadow-2xl flex items-start'>
-            <IconButton sx={{ margin: '20px', borderRadius: '10px', backgroundColor: '#4285F4', color: 'white', width: 45, height: 45 }}>
-              <PhoneInTalkIcon />
-            </IconButton>
-            <div className='ml-[20px]'>
-              <h1 className='text-[20px] font-bold mb-[10px]'>Telefon</h1>
-              <p>+998(91) 129 59 10</p>
-            </div>
-          </div>
-
-          {/* Email */}
-          <div className='w-[350px] h-[200px] shadow-2xl flex items-start'>
-            <IconButton sx={{ margin: '20px', borderRadius: '10px', backgroundColor: '#4285F4', color: 'white', width: 45, height: 45 }}>
-              <EmailIcon />
-            </IconButton>
-            <div className='ml-[20px]'>
-              <h1 className='text-[20px] font-bold mb-[10px]'>Elektron Pochta</h1>
-              <p>umidjonnajot@gmail.com</p>
-            </div>
-          </div>
-
-          {/* Manzil */}
-          <div className='w-[350px] h-[200px] shadow-2xl flex items-start'>
-            <IconButton sx={{ margin: '20px', borderRadius: '10px', backgroundColor: '#4285F4', color: 'white', width: 45, height: 45 }}>
-              <LocationOnIcon />
-            </IconButton>
-            <div className='ml-[20px]'>
-              <h1 className='text-[20px] font-bold mb-[10px]'>Manzil</h1>
-              <p>Farg‘ona shahar, Qirlola ko‘chasi 224-uy, Edu Pro</p>
-            </div>
-          </div>
-        </section>
-
         {/* Contact Form */}
         <section className={`relative z-10 max-w-[1150px] flex flex-col items-center justify-center mx-auto mt-[40px] border h-auto p-6 rounded-lg ${dark ? "bg-[#101828] text-white" : "bg-white text-black"}`}>
           <h1 className='text-3xl font-bold mb-6'>Murojaatlarni shu yerdan jo'nating</h1>
-          <form className='flex flex-col gap-4 w-full max-w-[500px]'>
+          <form className='flex flex-col gap-4 w-full max-w-[500px]' onSubmit={post_Comment}>
             <label className='font-bold'>To'liq ism</label>
-            <input onChange={e => setName(e.target.value)} className='p-3 border rounded w-full bg-transparent text-inherit' type="text" placeholder='F.I.SH' />
+            <input value={fullName} onChange={e => setName(e.target.value)} className='p-3 border rounded w-full bg-transparent text-inherit' type="text" placeholder='F.I.SH' />
 
             <label className='font-bold'>Telefon</label>
-            <input onChange={e => setPhone(e.target.value)} className='p-3 border rounded w-full bg-transparent text-inherit' type="tel" placeholder='+998' />
+            <input value={phone} onChange={e => setPhone(e.target.value)} className='p-3 border rounded w-full bg-transparent text-inherit' type="tel" placeholder='+998' />
 
             <label className='font-bold'>Xabar</label>
-            <textarea onChange={e => setMessage(e.target.value)} className='p-3 border rounded w-full h-[120px] bg-transparent text-inherit' />
+            <textarea value={message} onChange={e => setMessage(e.target.value)} className='p-3 border rounded w-full h-[120px] bg-transparent text-inherit' />
 
-            <button onClick={post_Comment} type='submit' className='h-[50px] rounded bg-blue-500 text-white font-bold hover:opacity-80 transition'>
+            <button type='submit' className='h-[50px] rounded bg-blue-500 text-white font-bold hover:opacity-80 transition'>
               Yuborish
             </button>
           </form>
         </section>
-
       </header>
 
-      {/* FOOTER */}
-      <footer className={`mt-[100px] py-10 ${dark ? "bg-[#0d1726] text-gray-300" : "bg-gray-50 text-black"}`}>
-        <div className='max-w-[1120px] mx-auto text-center'>
-          <img src={dark ? logo_white : logo_dark} alt="logo" className='mx-auto' />
-          <h2 className='text-2xl font-bold mt-4'>Biz bilan muvaffaqiyatga erishing</h2>
-          <p className={`${dark ? "text-gray-400" : "text-gray-600"} mt-2`}>
-            Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan
-          </p>
-
-          <div className='flex justify-center gap-5 mt-6'>
-            <button className={`p-2 rounded-[10px] px-8 font-bold flex gap-2 items-center ${dark ? "bg-white text-black" : "bg-white text-black border"} hover:opacity-50`}>
-              <img src={play} alt="play" className='w-5' />
-              Intro Video
-            </button>
-            <Button
-              component={Link}
-              to="/contact"
-              variant="contained"
-              sx={{
-                backgroundColor: "#3B82F6",
-                borderRadius: "10px",
-                padding: "8px 32px",
-                fontWeight: "bold",
-                textTransform: "none",
-                "&:hover": { backgroundColor: "#2563EB" }
-              }}
-            >
-              Bog‘lanish
-            </Button>
-          </div>
-
-          <div className='mt-10 border-t pt-4 flex justify-between text-sm'>
-            <p>© ITLIVE 2024. Barcha huquqlar himoyalangan</p>
-            <p>Xavfsizlik</p>
-          </div>
-        </div>
-      </footer>
-      {error && (
-        <Alert severity="error" onClose={() => setError(false)}>
-          Telefon yoki parol xato!
-        </Alert>
-      )}
-
-      <Snackbar
-        open={success}
-        autoHideDuration={4000}
-        onClose={() => setSuccess(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      {/* MODAL */}
+      <Dialog
+        open={modal.open}
+        onClose={() => setModal({ ...modal, open: false })}
+        PaperProps={{
+          style: {
+            borderRadius: 20,
+            padding: "20px",
+            textAlign: "center",
+            minWidth: "300px",
+          },
+        }}
       >
-        <Alert onClose={() => setSuccess(false)} severity="success" sx={{ width: '100%' }}>
-          Xabaringiz yuborildi ✅
-        </Alert>
-      </Snackbar>
+        <DialogContent>
+          {modal.loading ? (
+            <>
+              <CircularProgress size={70} sx={{ color: "blue" }} />
+              <Typography mt={2} fontWeight="bold" fontSize={20}>
+                Yuborilmoqda...
+              </Typography>
+            </>
+          ) : modal.success ? (
+            <>
+              <CheckCircleIcon sx={{ fontSize: 70, color: "green" }} />
+              <Typography mt={2} fontWeight="bold" fontSize={20}>
+                Xabar muvaffaqiyatli yuborildi!
+              </Typography>
+            </>
+          ) : (
+            modal.error && (
+              <>
+                <ErrorIcon sx={{ fontSize: 70, color: "red" }} />
+                <Typography mt={2} fontWeight="bold" fontSize={20}>
+                  {modal.error}
+                </Typography>
+              </>
+            )
+          )}
+        </DialogContent>
+      </Dialog>
+      {/* Footer */}
+      <footer className={`max-w-[1120px] mx-auto mt-[100px] text-center ${dark ? "text-gray-300" : "text-black"}`}>
+        <section>
+          <div className='flex flex-col gap-2 items-center'>
+            <img src={dark ? logo_white : logo_dark} alt="" />
+            <h2 className='text-2xl font-bold'>Biz bilan muvaffaqiyatga erishing</h2>
+            <p className={`${dark ? "text-gray-400" : "text-gray-500"}`}>
+              Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan
+            </p>
+            <div className='flex gap-5 mt-2'>
+              <button className={`p-2 rounded-[10px] px-8 font-bold flex gap-2 items-center ${dark ? "bg-white text-black" : "bg-white text-black border"} hover:opacity-50 transition-all duration-200`}>
+                <img src={play} alt="" className='w-5' />
+                <Link to="/turn">Intro Video</Link>
+              </button>
+              <Button
+                component={Link}
+                to="/contact"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#3B82F6",
+                  borderRadius: "10px",
+                  padding: "8px 32px",
+                  fontWeight: "bold",
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "#2563EB",
+                  }
+                }}
+              >
+                Bog'lanish
+              </Button>
+            </div>
+          </div>
+          <div className='mt-10'>
+            <hr />
+            <div className='flex justify-between items-center p-4'>
+              <p>© ITLIVE 2024. Barcha huquqlar himoyalangan</p>
+              <p>Xavfsizlik</p>
+            </div>
+          </div>
+        </section>
+      </footer>
     </div>
   )
 }
