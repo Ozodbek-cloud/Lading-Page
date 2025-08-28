@@ -93,7 +93,7 @@ export default function Main() {
                                     <img src={dark ? moon : sun} alt="" className='w-[20px] h-[20px]' />
                                 </button>
                                 <button className={`p-3 bg-black rounded-[10px] px-6 hover:opacity-[0.8] transition-all duration-300 text-white font-bold ${dark ? "bg-white" : ""}`}>
-                                    <Link to="/turn" className={`${dark ? "text-gray-800" : ""}`}>Examify</Link>
+                                    <Link to="https://examify.uz/" className={`${dark ? "text-gray-800" : ""}`}>Examify</Link>
                                 </button>
                                 <Button
                                     component={Link}
@@ -290,7 +290,7 @@ export default function Main() {
                             </ul>
                             <Button
                                 component={Link}
-                                to="/student"
+                                
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#3B82F6",
@@ -318,7 +318,7 @@ export default function Main() {
                             <p className='font-bold text-white mt-2'>Biz sizga bu imkoniyatni taqdim qilamiz</p>
                             <Button
                             component={Link}
-                                to="/student"
+                                
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#FFFFFF",

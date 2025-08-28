@@ -81,7 +81,7 @@ export default function About() {
                 </button>
                 <Button
                   component={Link}
-                  to="/student"
+                  to="/log"
                   variant="contained"
                   sx={{
                     backgroundColor: "#3B82F6", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
