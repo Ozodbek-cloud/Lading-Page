@@ -19,6 +19,7 @@ import img6 from "../../img/0004.jpg"
 import img7 from "../../img/0006.jpg"
 import img8 from "../../img/027.jpg"
 import axios from 'axios'
+
 export default function About() {
   const [showProgress, setProgres] = useState(true)
   const [mentor, setMentors] = useState([])
@@ -80,7 +81,7 @@ export default function About() {
                 </button>
                 <Button
                   component={Link}
-                  to="/turn"
+                  to="/student"
                   variant="contained"
                   sx={{
                     backgroundColor: "#3B82F6", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
@@ -169,7 +170,8 @@ export default function About() {
       </main>
 
       {/* Footer */}
-      <footer className={`max-w-[1750px] py-5 mt-[100px]  text-center ${dark ? "text-gray-300" : "text-black"}`}>
+
+      <footer className={`max-w-[1950px]  py-5 mt-[100px]  text-center ${dark ? "text-gray-300" : "text-black"}`}>
         <section className='max-w-[1120px] mx-auto '>
           <div className='flex flex-col gap-2 items-center'>
             <img src={dark ? logo_white : logo_dark} alt="" />
@@ -182,7 +184,7 @@ export default function About() {
               </button>
               <Button
                 component={Link}
-                to="/turn"
+                to="/contact"
                 variant="contained"
                 sx={{
                   backgroundColor: "#3B82F6",

@@ -15,10 +15,16 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import python from "../../img/pbf_fd37e99b-5b08-4e7f-b4af-595bb64707bf.png"
 import foundation from "../../img/pbf_e6f6d199-accf-4f46-bb94-449c4997686e.png"
-import user from "../../img/avatar-3.webp"
+import user from "../../img/avatar-3.webp"  
 import user2 from "../../img/avatar-5.webp"
+import axios from 'axios'
+
 export default function Main() {
     const [showProgress, setProgres] = useState(true)
+    const [courses, setCourses] = useState([])
+    const [category, setCategory] = useState("all")
+    const [categorys, setCategorys] = useState([])
+    const [filteredCourses, setFilteredCourses] = useState([])
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -27,6 +33,23 @@ export default function Main() {
         return () => clearInterval(timer)
     }, [])
 
+
+    useEffect(() => {
+        axios.get('https://edora-backend.onrender.com/courses')
+            .then(data => setCourses(data.data.data))
+        axios.get('https://edora-backend.onrender.com/course-category/getAll')
+            .then(data => setCategorys(data.data))
+    }, [category])
+
+
+    function search(categoryId) {
+        if (categoryId === "all") {
+            setFilteredCourses(courses);
+        } else {
+            let filteredCourse = courses.filter(el => el.category.id === categoryId);
+            setFilteredCourses(filteredCourse);
+        }
+    }
 
     const [dark, setDarkMode] = useState(false)
     //  async function getCourses() {
@@ -74,7 +97,7 @@ export default function Main() {
                                 </button>
                                 <Button
                                     component={Link}
-                                    to="/turn"
+                                    to="/log"
                                     variant="contained"
                                     sx={{
                                         backgroundColor: "#3B82F6", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
@@ -105,6 +128,8 @@ export default function Main() {
                                 </li>
                             </ul>
                             <Button
+                                component={Link}
+                                to="/course"
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#3B82F6",
@@ -140,155 +165,70 @@ export default function Main() {
                         Kasbga yo'naltirilgan amaliy mashg'ulotlar yordamida tez va samarali ravishda mutaxassis bo'ling.
                     </p>
                     <div className='flex gap-4 mt-5 justify-center'>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Barcha Kurslar
-                        </Button>
-                        <Button
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Fronted
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Backend
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Foundation
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            Mobil
-                        </Button>
-                        <Button
-
-                            to="/turn"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#3B82F6",
-                                borderRadius: "10px",
-                                padding: "8px 32px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                "&:hover": {
-                                    backgroundColor: "#2563EB",
-                                }
-                            }}
-                        >
-                            IT Matematika
-                        </Button>
-
+                        <div className='flex gap-4 mt-5 justify-center'>
+                            {categorys.map(el => (
+                                <Button
+                                    key={el.id}
+                                    onClick={() => search(el.id)}
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: "#3B82F6",
+                                        borderRadius: "10px",
+                                        color: "white",
+                                        padding: "8px 32px",
+                                        fontWeight: "bold",
+                                        textTransform: "none",
+                                        "&:hover": {
+                                            backgroundColor: "#2563EB",
+                                        }
+                                    }}
+                                >
+                                    {el.name}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
                     <div className='mt-[30px] flex-col justify-start items-start md:flex-row  flex gap-10'>
-                        <div className='shadow-[0px_0px_6px_5px_rgba(0,_0,_0,_0.1)] rounded-[5px]'>
-                            <img src={python} alt="" className='w-88 rounded-[5px]' />
-                            <div className='flex  items-center px-3 py-3 gap-2'>
-                                <img src={user} alt="" className='rounded-[50%] w-9' />
-                                <p className='font-bold'>Ergashev Abdulla</p>
-                            </div>
-                            <div className='flex justify-start px-3 flex-col items-start gap-2'>
-                                <h1 className='text-2xl font-serif font-bold'>PHP LARAVEL</h1>
-                                <div className='flex justify-between items-center  w-82'>
-                                    <p className='text-gray-600 font-bold'>Chegirma:</p>
-                                    <p className='text-[18px] font-bold'>60%</p>
-                                </div>
-                                <div className='flex justify-start items-start flex-col gap-2'>
-                                    <p className='text-gray-600 font-bold'>Kurs Narxi:</p>
-                                    <div className='flex justify-between items-center w-82 pb-8'>
-                                        <del className='text-[18px] text-gray-600 font-bold'>997500<sub>uzs</sub> </del>
-
-                                        <p className='text-[22px] font-bold'>399000 <sub>uzs</sub></p>
+                        <div className="mt-[30px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+                            {(filteredCourses.length > 0 ? filteredCourses : courses).map(el => (
+                                <div key={el._id} className="shadow-[0px_0px_6px_5px_rgba(0,_0,_0,_0.1)] rounded-[5px]">
+                                    <div>
+                                        <img
+                                            src={`https://edora-backend.onrender.com/uploads/banner/${el.banner}`}
+                                            alt={el.name}
+                                            className="w-full h-[200px] object-contain rounded-[5px]"
+                                        />
+                                    </div>
+                                    <div className="flex items-center px-3 py-3 gap-2">
+                                        <img
+                                            src={`https://edora-backend.onrender.com/uploads/mentors/${el.mentor.image}`}
+                                            alt={el.mentor.fullName}
+                                            className="rounded-full w-9 h-9 object-cover"
+                                        />
+                                        <p className="font-bold">{el.mentor.fullName}</p>
+                                    </div>
+                                    <div className="flex justify-start px-3 flex-col items-start gap-2">
+                                        <h1 className="text-2xl font-serif font-bold">{el.name}</h1>
+                                        <div className="flex justify-between items-center w-[290px]">
+                                            <p className="text-gray-600 font-bold">Chegirma:</p>
+                                            <p className="text-[18px] font-bold">60%</p>
+                                        </div>
+                                        <div className="flex justify-start items-start flex-col gap-2">
+                                            <p className="text-gray-600 font-bold">Kurs Narxi:</p>
+                                            <div className="flex justify-between items-center w-[320px] pb-8">
+                                                <del className="text-[18px] text-gray-600 font-bold">
+                                                    997500<sub>uzs</sub>
+                                                </del>
+                                                <p className="text-[22px] font-bold">
+                                                    {el.price} <sub>uzs</sub>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                        
-                        <div className='shadow-[0px_0px_6px_5px_rgba(0,_0,_0,_0.1)] rounded-[5px]'>
-                            <img src={foundation} alt="" className='w-88 rounded-[5px]' />
-                            <div className='flex  items-center px-3 py-3 gap-2'>
-                                <img src={user2} alt="" className='rounded-[50%] w-9' />
-                                <p className='font-bold'>Safarov Oybek</p>
-                            </div>
-                            <div className='flex justify-start px-3 flex-col items-start gap-2'>
-                                <h1 className='text-2xl font-serif font-bold'>FOUNDATION</h1>
-                                <div className='flex justify-between items-center  w-82'>
-                                    <p className='text-gray-600 font-bold'>Chegirma:</p>
-                                    <p className='text-[18px] font-bold'>60%</p>
-                                </div>
-                                <div className='flex justify-start items-start flex-col gap-2'>
-                                    <p className='text-gray-600 font-bold'>Kurs Narxi:</p>
-                                    <div className='flex justify-between items-center w-82 pb-8'>
-                                        <del className='text-[18px] text-gray-600 font-bold'>747500<sub>uzs</sub> </del>
 
-                                        <p className='text-[22px] font-bold'>299000 <sub>uzs</sub></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
                     </div>
                     <div className='flex justify-center mt-[30px]'>
                         <Button
@@ -327,7 +267,7 @@ export default function Main() {
                             </ul>
                             <Button
                                 component={Link}
-                                to="/turn"
+                                to="/student"
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#3B82F6",
@@ -350,7 +290,7 @@ export default function Main() {
                             </ul>
                             <Button
                                 component={Link}
-                                to="/turn"
+                                to="/student"
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#3B82F6",
@@ -377,6 +317,8 @@ export default function Main() {
                             <h1 className='text-5xl font-bold text-white'>Istalgan nuqtadan onlayn<br />o’qish imkoniyati</h1>
                             <p className='font-bold text-white mt-2'>Biz sizga bu imkoniyatni taqdim qilamiz</p>
                             <Button
+                            component={Link}
+                                to="/student"
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#FFFFFF",
@@ -462,7 +404,7 @@ export default function Main() {
                             </button>
                             <Button
                                 component={Link}
-                                to="/turn"
+                                to="/contact"
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#3B82F6",

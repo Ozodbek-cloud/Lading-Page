@@ -60,7 +60,7 @@ function Contact() {
 
                 <Button
                   component={Link}
-                  to="/turn"
+                  to="/student"
                   variant="contained"
                   sx={{
                     backgroundColor: "#3B82F6",
@@ -125,7 +125,7 @@ function Contact() {
         </section>
 
         {/* Contact Form */}
-        <section className='max-w-[1150px] mx-auto mt-[40px] bg-gray-100 border h-[600px] p-6 rounded-lg'>
+        <section className='max-w-[1150px] flex flex-col items-center justify-center  mx-auto mt-[40px] bg-gray-100 border h-[600px] p-6 rounded-lg'>
           <h1 className='text-3xl font-bold mb-6'>Murojaatlarni shu yerdan jo'nating</h1>
           <form className='flex flex-col gap-4 w-[500px]'>
             <label className='font-bold'>To'liq ism</label>

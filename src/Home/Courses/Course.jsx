@@ -83,7 +83,7 @@ export default function Course() {
                                 </button>
                                 <Button
                                     component={Link}
-                                    to="/turn"
+                                    to="/student"
                                     variant="contained"
                                     sx={{
                                         backgroundColor: "#3B82F6", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
@@ -208,7 +208,7 @@ export default function Course() {
                             </button>
                             <Button
                                 component={Link}
-                                to="/turn"
+                                to="/contact"
                                 variant="contained"
                                 sx={{
                                     backgroundColor: "#3B82F6",
