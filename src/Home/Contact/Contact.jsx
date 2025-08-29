@@ -61,7 +61,6 @@ function Contact() {
         error: "Xabar yuborishda xatolik yuz berdi!"
       })
     } finally {
-      // 3 sekunddan keyin yopiladi
       setTimeout(() => {
         setModal({ open: false, loading: false, success: false, error: "" })
       }, 3000)
@@ -75,19 +74,26 @@ function Contact() {
         <section className={`max-w-[1920px] shadow-md fixed top-0 left-0 w-full z-[999] backdrop-blur-[40px] ${dark ? "bg-[#101828] text-white" : "bg-white/70 text-black"}`}>
           {showProgress && (
             <Box sx={{ width: "100%" }} className="absolute">
-              <LinearProgress />
+              <LinearProgress
+                sx={{
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: "#e4b75a",
+                  },
+                  backgroundColor: "#f5f5f5",
+                }}
+              />
             </Box>
           )}
           <div className='max-w-[1120px] mx-auto'>
             <nav className='flex justify-between items-center py-5'>
               {/* Logo + Menu */}
               <div className='flex items-center gap-10'>
-                <img src={dark ? logo_white : logo_dark} alt="logo" />
+                <h1 className='text-4xl font-bold text-black'>Edu<span className='text-[#e4b75a] font-bold text-4xl'>Nite</span></h1>
                 <ul className='flex gap-5'>
-                  <li className='hover:text-blue-500 transition-all duration-300'><Link to="/">Asosiy</Link></li>
-                  <li className='hover:text-blue-500 transition-all duration-300'><Link to="/course">Kurslar</Link></li>
-                  <li className='hover:text-blue-500 transition-all duration-300'><Link to="/about_us">Biz Haqimizda</Link></li>
-                  <li className='border-b-2 text-blue-500 transition-all duration-300'><Link to="/contact">Bog'lanish</Link></li>
+                  <li className='hover:text-[#e4b75a] transition-all duration-300'><Link to="/">Asosiy</Link></li>
+                  <li className='hover:text-[#e4b75a] transition-all duration-300'><Link to="/course">Kurslar</Link></li>
+                  <li className='hover:text-[#e4b75a] transition-all duration-300'><Link to="/about_us">Biz Haqimizda</Link></li>
+                  <li className='border-b-2 text-[#e4b75a] transition-all duration-300'><Link to="/contact">Bog'lanish</Link></li>
                 </ul>
               </div>
 
@@ -108,12 +114,12 @@ function Contact() {
                   to="/log"
                   variant="contained"
                   sx={{
-                    backgroundColor: "#3B82F6",
+                    backgroundColor: "#e4b75a",
                     borderRadius: "10px",
                     padding: "12px 20px",
                     fontWeight: "bold",
                     textTransform: "none",
-                    "&:hover": { backgroundColor: "#2563EB" }
+                    "&:hover": { backgroundColor: "#e4b75a" }
                   }}
                 >
                   Kirish
@@ -125,10 +131,10 @@ function Contact() {
 
         {/* Contact Hero */}
         <section className='relative max-w-[1150px] mx-auto pt-[150px]'>
-          <div className="absolute top-[100px] right-[900px] w-[100px] h-[100px] md:w-[500px] md:h-[500px] lg:w-[700px] lg:h-[700px] rounded-full blur-[100px] bg-blue-500 opacity-15 -z-10"></div>
+          <div className="absolute top-[100px] right-[900px] w-[100px] h-[100px] md:w-[500px] md:h-[500px] lg:w-[700px] lg:h-[700px] rounded-full blur-[100px] bg-[#e4b75a] opacity-15 -z-10"></div>
 
           <div className='relative z-10'>
-            <p className='text-blue-500 font-bold'>Bog'lanish</p>
+            <p className='text-[#e4b75a] font-bold'>Bog'lanish</p>
             <h1 className='text-[40px]'>Savollaringiz bo’lsa murojaat qiling</h1>
           </div>
         </section>
@@ -146,7 +152,7 @@ function Contact() {
             <label className='font-bold'>Xabar</label>
             <textarea value={message} onChange={e => setMessage(e.target.value)} className='p-3 border rounded w-full h-[120px] bg-transparent text-inherit' />
 
-            <button type='submit' className='h-[50px] rounded bg-blue-500 text-white font-bold hover:opacity-80 transition'>
+            <button type='submit' className='h-[50px] rounded bg-[#e4b75a] text-white font-bold hover:opacity-80 transition'>
               Yuborish
             </button>
           </form>
@@ -212,13 +218,13 @@ function Contact() {
                 to="/contact"
                 variant="contained"
                 sx={{
-                  backgroundColor: "#3B82F6",
+                  backgroundColor: "#e4b75a",
                   borderRadius: "10px",
                   padding: "8px 32px",
                   fontWeight: "bold",
                   textTransform: "none",
                   "&:hover": {
-                    backgroundColor: "#2563EB",
+                    backgroundColor: "#e4b75a",
                   }
                 }}
               >

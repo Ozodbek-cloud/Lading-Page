@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Register from './Home/Student/Regsiter'
 import Parol from './Home/Student/Parol'
 import Log from './Home/Student/Student'
+import Mentor from './Mentor/Mentor'
 export default function App() {
   return (
     <Router>
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/log" element={<Log />} /> 
           <Route path="/reg" element={<Register />} /> 
           <Route path="/pass" element={<Parol />} /> 
+          <Route path="/mentor" element={<Mentor />} /> 
         </Routes>
       </Router>
   )

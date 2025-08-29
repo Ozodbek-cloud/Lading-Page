@@ -47,24 +47,31 @@ export default function About() {
         <section className={`max-w-[1920px] shadow-md fixed top-0 left-0 w-full z-[999] backdrop-blur-[40px] ${dark ? "bg-[#101828] text-white" : "bg-white/70 text-black"}`}>
           {showProgress && (
             <Box sx={{ width: "100%" }} className="absolute">
-              <LinearProgress />
+              <LinearProgress
+                sx={{
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: "#e4b75a",
+                  },
+                  backgroundColor: "#f5f5f5", 
+                }}
+              />
             </Box>
           )}
           <div className='max-w-[1120px] mx-auto'>
             <nav className='flex justify-between items-center py-5 mx-auto'>
               <div className='flex items-center gap-10'>
-                <img src={dark ? logo_white : logo_dark} alt="" />
+                <h1 className='text-4xl font-bold text-black'>Edu<span className='text-[#e4b75a] font-bold text-4xl'>Nite</span></h1>
                 <ul className='flex gap-5'>
-                  <li className=' hover:text-blue-500 transition-all duration-300'>
+                  <li className=' hover:text-[#e4b75a] transition-all duration-300'>
                     <Link to="/">Asosiy</Link>
                   </li>
-                  <li className=' hover:text-blue-500 transition-all duration-300'>
+                  <li className=' hover:text-[#e4b75a] transition-all duration-300'>
                     <Link to="/course">Kurslar</Link>
                   </li>
-                  <li className='border-b-2 text-blue-500 hover:text-blue-500 transition-all duration-300'>
+                  <li className='border-b-2 text-[#e4b75a] hover:text-[#e4b75a] transition-all duration-300'>
                     <Link to="/about_us">Biz Haqimizda</Link>
                   </li>
-                  <li className='hover:text-blue-500 transition-all duration-300'>
+                  <li className='hover:text-[#e4b75a] transition-all duration-300'>
                     <Link to="/contact">Bog'lanish</Link>
                   </li>
                 </ul>
@@ -84,8 +91,8 @@ export default function About() {
                   to="/log"
                   variant="contained"
                   sx={{
-                    backgroundColor: "#3B82F6", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
-                      backgroundColor: "#2563EB",
+                    backgroundColor: "#e4b75a", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
+                      backgroundColor: "#e4b75a",
                     }
                   }}
                 >
@@ -187,13 +194,13 @@ export default function About() {
                 to="/contact"
                 variant="contained"
                 sx={{
-                  backgroundColor: "#3B82F6",
+                  backgroundColor: "#e4b75a",
                   borderRadius: "10px",
                   padding: "8px 32px",
                   fontWeight: "bold",
                   textTransform: "none",
                   "&:hover": {
-                    backgroundColor: "#2563EB",
+                    backgroundColor: "#e4b75a",
                   }
                 }}
               >

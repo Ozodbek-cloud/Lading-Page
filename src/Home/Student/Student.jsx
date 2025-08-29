@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import login from "../../img/login.png"
 import { Alert, Button, Snackbar } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo_dark from "../../img/logo-dark.svg"
 import axios from 'axios'
 
@@ -10,22 +10,28 @@ export default function Log() {
   const [pass, setPass] = useState("")
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
-
+  const navigate = useNavigate()
   async function post() {
     try {
-      let res = await axios.post('https://edora-backend.onrender.com/auth/login', {
+      let res = await axios.post('https://fn3.fixoo.uz/auth/login', {
         phone: phone,
         password: pass
       })
-      console.log(res.data)
-      setSuccess(true)   
+      console.log(res)
+      setSuccess(true)
       setError(false)
+      if (res.status == 201 && res.data.user.role === 'MENTOR') {
+        navigate("/mentor")
+      } else {
+        setError(false)
+      }
     } catch (err) {
       console.error(err)
-      setError(true)    
+      setError(true)
       setSuccess(false)
     }
   }
+
 
   return (
     <div className="flex h-screen">
@@ -35,13 +41,13 @@ export default function Log() {
 
       <div className="flex-1 flex justify-center items-center">
         <div className='absolute top-5 right-10 '>
-          <Link to="/"><img src={logo_dark} alt="" /></Link>
+          <Link to="/"><h1 className='text-4xl font-bold text-black'>Edu<span className='text-[#e4b75a] font-bold text-4xl'>Nite</span></h1></Link>
         </div>
 
         <div className="w-[300px] flex flex-col gap-5">
           <h1 className='font-bold text-2xl text-center'>Kirish</h1>
 
-          
+
           {error && (
             <Alert severity="error" onClose={() => setError(false)}>
               Telefon yoki parol xato!
@@ -81,18 +87,18 @@ export default function Log() {
             Kirish
           </Button>
           <div className='flex justify-between items-center'>
-            <p className='font-bold'>Hisobingiz yoqmi ? </p> 
+            <p className='font-bold'>Hisobingiz yoqmi ? </p>
             <p className='text-blue-600 font-bold cursor-pointer'><Link to="/reg">Ro'yxatdan O'tish</Link></p>
           </div>
         </div>
       </div>
 
-      
+
       <Snackbar
         open={success}
         autoHideDuration={4000}
         onClose={() => setSuccess(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert onClose={() => setSuccess(false)} severity="success" sx={{ width: '100%' }}>
           Muvaffaqiyatli kirdingiz!

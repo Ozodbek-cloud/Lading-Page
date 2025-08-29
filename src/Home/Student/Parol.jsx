@@ -13,7 +13,8 @@ export default function Parol() {
 
             <div className="flex-1 flex justify-center items-center">
                 <div className='absolute top-5 right-10 '>
-                    <Link to="/"><img src={logo_dark} alt="" /></Link>
+                    <Link to="/">              <h1 className='text-4xl font-bold text-black'>Edu<span className='text-[#e4b75a] font-bold text-4xl'>Nite</span></h1>
+</Link>
                 </div>
                 <div className="w-[300px] flex flex-col gap-3">
                     <h1 className='font-bold text-2xl text-center'>Parolni Qayta Ornatish</h1>
