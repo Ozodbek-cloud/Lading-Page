@@ -62,7 +62,6 @@ export default function Mentor() {
           </div>
         </div>
       </section>
-
       {/* Content */}
       <section className="flex-1">
         <div className="p-5 w-full max-w-[1650px] border flex items-center justify-between">
