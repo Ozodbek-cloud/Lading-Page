@@ -59,7 +59,7 @@ export default function Log() {
             <input
               onChange={e => setPhone(e.target.value)}
               type="text"
-              className="w-full border px-3 py-2 rounded-md outline-none focus:border-blue-500"
+              className="w-full border px-3 py-2 rounded-md outline-none focus:border-[#e4b75a]"
               placeholder="+998"
             />
           </div>
@@ -68,19 +68,19 @@ export default function Log() {
             <input
               onChange={e => setPass(e.target.value)}
               type="password"
-              className="w-full border px-3 py-2 rounded-md outline-none focus:border-blue-500"
+              className="w-full border px-3 py-2 rounded-md outline-none focus:border-[#e4b75a]"
               placeholder="Parol"
             />
           </div>
           <div className='flex justify-end items-end'>
-            <h1 className='text-blue-600 font-bold cursor-pointer'><Link to="/pass">Parolni Unutdingizmi ?</Link></h1>
+            <h1 className='text-[#e4b75a] font-bold cursor-pointer'><Link to="/pass">Parolni Unutdingizmi ?</Link></h1>
           </div>
           <Button
             onClick={post}
             variant="contained"
             sx={{
-              backgroundColor: "#3B82F6", borderRadius: "50px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
-                backgroundColor: "#2563EB",
+              backgroundColor: "#e4b75a", borderRadius: "50px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
+                backgroundColor: "#e4b75a",
               }
             }}
           >
@@ -88,7 +88,7 @@ export default function Log() {
           </Button>
           <div className='flex justify-between items-center'>
             <p className='font-bold'>Hisobingiz yoqmi ? </p>
-            <p className='text-blue-600 font-bold cursor-pointer'><Link to="/reg">Ro'yxatdan O'tish</Link></p>
+            <p className='text-[#e4b75a] font-bold cursor-pointer'><Link to="/reg">Ro'yxatdan O'tish</Link></p>
           </div>
         </div>
       </div>

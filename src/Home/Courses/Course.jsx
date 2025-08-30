@@ -54,7 +54,7 @@ export default function Course() {
                                     "& .MuiLinearProgress-bar": {
                                         backgroundColor: "#e4b75a",
                                     },
-                                    backgroundColor: "#f5f5f5", 
+                                    backgroundColor: "#f5f5f5",
                                 }}
                             />
                         </Box>
@@ -203,7 +203,7 @@ export default function Course() {
             <footer className={`max-w-[1120px] mx-auto mt-[100px] text-center ${dark ? "text-gray-300" : "text-black"}`}>
                 <section>
                     <div className='flex flex-col gap-2 items-center'>
-                        <img src={dark ? logo_white : logo_dark} alt="" />
+                        <h1 className='text-4xl font-bold text-black'>Edu<span className='text-[#e4b75a] font-bold text-4xl'>Nite</span></h1>
                         <h2 className='text-2xl font-bold'>Biz bilan muvaffaqiyatga erishing</h2>
                         <p className={`${dark ? "text-gray-400" : "text-gray-500"}`}>
                             Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan

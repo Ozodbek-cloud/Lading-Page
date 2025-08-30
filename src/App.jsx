@@ -7,6 +7,8 @@ import Register from './Home/Student/Regsiter'
 import Parol from './Home/Student/Parol'
 import Log from './Home/Student/Student'
 import Mentor from './Mentor/Mentor'
+import Category_courses from './Mentor/Category_Courses/Category_courses'
+import All_Courses from './Mentor/All_courses/All_courses'
 export default function App() {
   return (
     <Router>
@@ -18,7 +20,10 @@ export default function App() {
           <Route path="/log" element={<Log />} /> 
           <Route path="/reg" element={<Register />} /> 
           <Route path="/pass" element={<Parol />} /> 
-          <Route path="/mentor" element={<Mentor />} /> 
+          <Route path="/mentor" element={<Mentor />} />
+          <Route path="/category_courses" element={<Category_courses />} />
+          <Route path="/all_courses" element={<All_Courses />} />
+
         </Routes>
       </Router>
   )

@@ -74,7 +74,7 @@ export default function Main() {
                                     "& .MuiLinearProgress-bar": {
                                         backgroundColor: "#e4b75a",
                                     },
-                                    backgroundColor: "#f5f5f5", 
+                                    backgroundColor: "#f5f5f5",
                                 }}
                             />
                         </Box>
@@ -114,7 +114,7 @@ export default function Main() {
                                     variant="contained"
                                     sx={{
                                         backgroundColor: "#e4b75a", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
-                                            backgroundColor: "#2563EB",
+                                            backgroundColor: "#e4b75a",
                                         }
                                     }}
                                 >
@@ -407,7 +407,7 @@ export default function Main() {
             <footer className={`max-w-[1750px]  mx-auto mt-[100px] text-center p-15 ${dark ? "text-gray-300" : "text-black"}`}>
                 <section className='max-w-[1120px] mx-auto'>
                     <div className='flex flex-col gap-2 items-center'>
-                        <img src={dark ? logo_white : logo_dark} alt="" />
+                        <h1 className='text-4xl font-bold text-black'>Edu<span className='text-[#e4b75a] font-bold text-4xl'>Nite</span></h1>
                         <h2 className='text-2xl font-bold'>Biz bilan muvaffaqiyatga erishing</h2>
                         <p className={`${dark ? "text-gray-400" : "text-gray-500"}`}>Barcha kurslarimiz tajribali mentorlar tomonidan tayyorlangan</p>
                         <div className='flex gap-5 mt-2'>
