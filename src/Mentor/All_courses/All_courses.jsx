@@ -263,7 +263,7 @@ export default function All_Courses() {
                         </div>
 
                         <div className="flex gap-3">
-                            <buttonj
+                            <button
                                 onClick={() => setPage((p) => Math.max(p - 1, 1))}
                                 disabled={page === 1}
                                 className="px-4 py-2 border rounded disabled:opacity-50"
