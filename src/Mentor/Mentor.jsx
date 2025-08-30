@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import left_arrow from "../img/left-arrow.png"
 import begin from "../img/begin.png"
 import learning from "../img/learning.png"
@@ -11,21 +11,21 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import { Badge, Avatar } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Mentor() {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [active, setActive] = useState("Asosiy")
   const [darkMode, setDarkMode] = useState(false)
   const [notifCount, setNotifCount] = useState(3)
   const [openCourses, setOpenCourses] = useState(false)
-  const [activen, setActiven] = useState("kategoriya");
-  const menuItems = [
-    { name: "Asosiy", icon: begin },
-    { name: "Kurslar", icon: learning },
-    { name: "Izohlar", icon: comment },
-    { name: "Chiqish", icon: off },
-  ]
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    let token = localStorage.getItem("token")
+    if (!token) {
+      navigate("/log")
+    }
+  }, [navigate])
 
   return (
     <div className={`${darkMode ? "bg-[#101828]" : ""} h-screen flex bg-gray-50`}>
@@ -53,33 +53,54 @@ export default function Mentor() {
           )}
 
           <nav className="flex flex-col gap-2 mt-2">
-            {menuItems.map((item) => (
-              <div key={item.name} className="w-full">
-                <button
-                  onClick={() => {
-                    setActive(item.name)
-                    if (item.name === "Kurslar") setOpenCourses(!openCourses)
-                    else setOpenCourses(false)
-                  }}
-                  className={`flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full
-                    ${active === item.name ? "bg-[#e4b75a] text-black shadow-md" : "hover:bg-[#0b1728]/60 text-white"}`}
-                >
-                  <img src={item.icon} alt={item.name} className="w-6" />
-                  {!isCollapsed && <span className="font-medium">{item.name}</span>}
-                </button>
 
-                {!isCollapsed && item.name === "Kurslar" && openCourses && (
-                  <div className="ml-10 mt-2 space-y-2 text-sm text-white flex flex-col transition-all duration-200  justify-start items-start ">
-                    <h1 onClick={() => setActive("kategoriya")} className={`font-semibold hover:underline cursor-pointer p-2 ${active === "kategoriya" ? "text-[#e4b75a] border border-[#e4b75a] rounded-2xl transition-all duration-200" : "text-[#fff]"}`} >
-                      <Link to="/category_courses">Kategoriya</Link>
-                    </h1>
+            <div className="w-full ">
+              <button
+                onClick={() => setOpenCourses(false)}
+                className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
+              >
+                <img src={begin} alt="Asosiy" className="w-6" />
+                {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer">Asosiy</span>}
+              </button>
+            </div>
 
-                    <h1 onClick={() => setActive("kurslar")} className={`font-semibold hover:underline cursor-pointer p-2 ${active === "kurslar" ? "text-[#e4b75a] border border-[#e4b75a] rounded-2xl transition-all duration-200" : "text-[#fff]"}`}><Link to="/all_courses">Barcha kurslar</Link> </h1>
-                    
-                  </div>
-                )}
-              </div>
-            ))}
+            <div className="w-full">
+              <button
+                onClick={() => setOpenCourses(!openCourses)}
+                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
+              >
+                <img src={learning} alt="Kurslar" className="w-6" />
+                {!isCollapsed && <span className="font-medium cursor-pointer">Kurslar</span>}
+              </button>
+
+              {!isCollapsed && openCourses && (
+                <div className="ml-10 mt-2 space-y-2 text-sm text-white flex flex-col transition-all duration-200">
+                  <Link to="/category_courses" className="font-semibold hover:underline cursor-pointer p-2">Kategoriya</Link>
+                  <Link to="/all_courses" className="font-semibold hover:underline cursor-pointer p-2">Barcha kurslar</Link>
+                </div>
+              )}
+            </div>
+
+            <div className="w-full">
+              <button
+                onClick={() => setOpenCourses(false)}
+                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
+              >
+                <img src={comment} alt="Izohlar" className="w-6" />
+                {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/comments">Izohlar</Link></span>}
+              </button>
+            </div>
+
+            <div className="w-full">
+              <button
+                onClick={() => setOpenCourses(false)}
+                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
+              >
+                <img src={off} alt="Chiqish" className="w-6" />
+                {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/log_out">Chiqish</Link></span>}
+              </button>
+            </div>
+
           </nav>
 
           <div className="mt-auto">
@@ -132,23 +153,30 @@ export default function Mentor() {
         </header>
 
         <section className="p-6 overflow-auto">
-          <div className="bg-white rounded-xl shadow-md p-5 mb-6 max-w-[1250px]">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold">Dashboard</h2>
-                <p className="text-sm text-gray-500">Overview of recent activity</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <button className="px-4 py-2 rounded-lg border hover:bg-gray-100 transition">Filter</button>
-                <button className="px-4 py-2 rounded-lg bg-[#e4b75a] text-black font-semibold hover:brightness-95 transition">Create</button>
-              </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-4">
+              <h3 className="text-xl font-bold">Kurslar Statistikasi</h3>
+              <p className="text-gray-500">Umumiy kurslar: 12</p>
+              <p className="text-gray-500">Aktiv kurslar: 9</p>
+              <p className="text-gray-500">Tugallangan kurslar: 3</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-4">
+              <h3 className="text-xl font-bold">Foydalanuvchilar Faoliyati</h3>
+              <p className="text-gray-500">Yangi registratsiyalar: 15</p>
+              <p className="text-gray-500">Aktiv foydalanuvchilar: 42</p>
+              <p className="text-gray-500">Bugungi loginlar: 27</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-4">
+              <h3 className="text-xl font-bold">So‘nggi Vazifalar</h3>
+              <p className="text-gray-500">Foydalanuvchi X registratsiyadan o‘tdi</p>
+              <p className="text-gray-500">Kurs Y yakunlandi</p>
+              <p className="text-gray-500">Komment Z qo‘shildi</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-4 rounded-xl shadow-sm">Card 1</div>
-            <div className="bg-white p-4 rounded-xl shadow-sm">Card 2</div>
-            <div className="bg-white p-4 rounded-xl shadow-sm">Card 3</div>
-          </div>
+
         </section>
       </main>
     </div>

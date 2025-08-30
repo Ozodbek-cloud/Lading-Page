@@ -12,49 +12,29 @@ import DarkModeIcon from '@mui/icons-material/DarkMode'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import { Badge, Avatar, Button } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
-export default function Category_Courses() {
+export default function Log_Out() {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [darkMode, setDarkMode] = useState(false)
     const [notifCount, setNotifCount] = useState(3)
     const [openCourses, setOpenCourses] = useState(false)
-    const [search, setSearch] = useState("")
-    const [filtered, setFiltered] = useState([])
-    const [category, setCategory] = useState([])
+    const [pos, setPos] = useState({ top: "50%", left: "50%" })
     const navigate = useNavigate()
 
-    useEffect(() => {
-        axios.get('https://fn3.fixoo.uz/course-category/getAll').then(data => {
-            setCategory(data.data)
-            setFiltered(data.data)
-        })
-    }, [])
+    function moveButton() {
+        const randomTop = Math.floor(Math.random() * 80) + 10
+        const randomLeft = Math.floor(Math.random() * 80) + 10
+        setPos({ top: `${randomTop}%`, left: `${randomLeft}%` })
+    }
 
-    useEffect(() => {
-        let token = localStorage.getItem("token")
-        if (!token) {
-            navigate("/log")
-        }
-    }, [navigate])
-
-    const [rowsPerPage, setRowsPerPage] = useState(5)
-    const [page, setPage] = useState(1)
-
-    const totalPages = Math.ceil(category.length / rowsPerPage)
-    const startIndex = (page - 1) * rowsPerPage
-    const paginatedData = filtered.slice(startIndex, startIndex + rowsPerPage)
-
-    function Search(e) {
-        e.preventDefault()
-        const result = category.filter(el =>
-            el.name.toLowerCase().includes(search.toLowerCase())
-        )
-        setFiltered(result)
+    function log_out() {
+        localStorage.removeItem("token")
+        navigate("/log")
     }
 
     return (
         <div className={`${darkMode ? "bg-[#101828]" : ""} h-screen flex bg-gray-50`}>
+            {/* Sidebar */}
             <aside className={`${isCollapsed ? "w-[80px]" : "w-[300px]"} transition-all duration-300`}>
                 <div className="bg-[#0f172a] text-white flex flex-col gap-6 p-4 h-full shadow-lg">
                     <div className="flex items-center justify-between">
@@ -92,17 +72,17 @@ export default function Category_Courses() {
                         <div className="w-full">
                             <button
                                 onClick={() => setOpenCourses(!openCourses)}
-                                className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                                className="flex items-center gap-4 p-3 rounded-xl  transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
                             >
                                 <img src={learning} alt="Kurslar" className="w-6" />
-                                {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer">Kurslar</span>}
+                                {!isCollapsed && <span className="font-medium  cursor-pointer">Kurslar</span>}
                             </button>
                             {!isCollapsed && openCourses && (
                                 <div className="ml-10 mt-2 space-y-2 text-sm text-white flex flex-col">
-                                    <h1 className="font-semibold text-[#e4b75a] cursor-pointer p-2 hover:text-[#e4b75a]">
+                                    <h1 className="font-semibold  cursor-pointer p-2 ">
                                         <Link to="/category_courses">Kategoriya</Link>
                                     </h1>
-                                    <h1 className="font-semibold cursor-pointer p-2 hover:text-[#e4b75a]">
+                                    <h1 className="font-semibold cursor-pointer p-2 ">
                                         <Link to="/all_courses">Barcha kurslar</Link>
                                     </h1>
                                 </div>
@@ -122,10 +102,10 @@ export default function Category_Courses() {
                         <div className="w-full">
                             <button
                                 onClick={() => setOpenCourses(false)}
-                                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                                className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
                             >
                                 <img src={off} alt="Chiqish" className="w-6" />
-                                {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/log_out">Chiqish</Link></span>}
+                                {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer"><Link to="/log_out">Chiqish</Link></span>}
                             </button>
                         </div>
                     </nav>
@@ -142,6 +122,7 @@ export default function Category_Courses() {
                 </div>
             </aside>
 
+            {/* Main */}
             <main className="flex-1 flex flex-col">
                 <header className="w-full bg-white shadow-md px-6 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -170,54 +151,30 @@ export default function Category_Courses() {
                     </div>
                 </header>
 
-                <section className="p-6 mt-5 overflow-auto">
-                    <h1 className='text-3xl font-bold'>KategoryaLar</h1>
-                    <h1 className='text-2xl'>Fodalanuvchilar <span>🟢</span> Kategorylar</h1>
-                    <div className='flex gap-5 mt-8'>
-                        <input onChange={e => setSearch(e.target.value)} type="text" placeholder='izlash' className='border-2 border-[#e4b75a] py-3 px-3 rounded-2xl max-w-[500px] w-full' />
-                        <Button onClick={Search} variant="contained" sx={{ backgroundColor: "#e4b75a", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": { backgroundColor: "#e4b75a" } }}>
-                            Kirish
+                <section className="p-6 mt-5 flex justify-center">
+                    <div className='justify-center flex flex-col'>
+                        <h1 className="text-5xl font-bold text-red-700 mb-6 animate-blink">
+                            Chiqish
+                        </h1>
+
+                        <Button
+                            onClick={log_out}
+                            variant="contained"
+                            onMouseEnter={moveButton}
+                            sx={{
+                                position: "absolute",
+                                top: pos.top,
+                                left: pos.left,
+                                backgroundColor: "red",
+                                borderRadius: "10px",
+                                padding: "12px 40px",
+                                fontWeight: "bold",
+                                textTransform: "none",
+                                transition: "top 0.3s, left 0.3s",
+                            }}
+                        >
+                            Log Out
                         </Button>
-                    </div>
-                    <table className="w-full border-collapse text-xl mt-10">
-                        <thead>
-                            <tr className="bg-gray-100">
-                                <th className="text-left py-4 px-8 border-b">TR</th>
-                                <th className="text-left py-4 px-8 border-b">Kategoriya</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {paginatedData.map((item) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="py-4 px-8 border-b">{item.id}</td>
-                                    <td className="py-4 px-8 border-b">{item.name}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <div className="flex justify-between items-center mt-8 text-gray-600 text-lg">
-                        <div className="flex items-center gap-4">
-                            <span>Rows per page:</span>
-                            <select
-                                value={rowsPerPage}
-                                onChange={(e) => {
-                                    setRowsPerPage(Number(e.target.value))
-                                    setPage(1)
-                                }}
-                                className="border rounded px-4 py-2"
-                            >
-                                <option value={5}>5</option>
-                                <option value={10}>10</option>
-                                <option value={20}>20</option>
-                            </select>
-                            <span>
-                                {startIndex + 1}–{Math.min(startIndex + rowsPerPage, filtered.length)} of {filtered.length}
-                            </span>
-                        </div>
-                        <div className="flex gap-3">
-                            <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1} className="px-4 py-2 border rounded disabled:opacity-50">{"<"}</button>
-                            <button onClick={() => setPage((p) => Math.min(p + 1, totalPages))} disabled={page === totalPages} className="px-4 py-2 border rounded disabled:opacity-50">{">"}</button>
-                        </div>
                     </div>
                 </section>
             </main>

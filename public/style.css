@@ -1,1 +1,9 @@
 @import "tailwindcss";
+@keyframes blink {
+  0%, 100% { color: red; opacity: 1; }
+  50% { color: darkred; opacity: 0.5; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}

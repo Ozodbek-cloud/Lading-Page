@@ -11,37 +11,36 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import { Badge, Avatar, Button } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 export default function All_Courses() {
     const [isCollapsed, setIsCollapsed] = useState(false)
-    const [active, setActive] = useState("Asosiy")
     const [darkMode, setDarkMode] = useState(false)
     const [notifCount, setNotifCount] = useState(3)
     const [openCourses, setOpenCourses] = useState(false)
     const [search, setSearch] = useState("")
-    const [activen, setActiven] = useState("kategoriya");
     const [filtered, setFiltered] = useState([])
     const [category, setCategory] = useState([])
-
-    const menuItems = [
-        { name: "Asosiy", icon: begin },
-        { name: "Kurslar", icon: learning },
-        { name: "Izohlar", icon: comment },
-        { name: "Chiqish", icon: off },
-    ]
+    const navigate = useNavigate()
+    useEffect(() => {
+        axios.get('https://fn3.fixoo.uz/courses').then(data => {
+            setCategory(data.data)
+            setFiltered(data.data.data)
+        })
+    }, [])
 
     useEffect(() => {
-        axios.get('https://fn3.fixoo.uz/courses').then(data => { setCategory(data.data), setFiltered(data.data.data) })
-    }, [])
-    console.log(filtered)
+        let token = localStorage.getItem("token")
+        if (!token) {
+            navigate("/log")
+        }
+    }, [navigate])
 
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(1)
 
     const totalPages = Math.ceil(category.length / rowsPerPage)
-
     const startIndex = (page - 1) * rowsPerPage
     const paginatedData = filtered.slice(startIndex, startIndex + rowsPerPage)
 
@@ -52,6 +51,7 @@ export default function All_Courses() {
         )
         setFiltered(result)
     }
+
     return (
         <div className={`${darkMode ? "bg-[#101828]" : ""} h-screen flex bg-gray-50`}>
             <aside className={`${isCollapsed ? "w-[80px]" : "w-[300px]"} transition-all duration-300`}>
@@ -78,33 +78,56 @@ export default function All_Courses() {
                     )}
 
                     <nav className="flex flex-col gap-2 mt-2">
-                        {menuItems.map((item) => (
-                            <div key={item.name} className="w-full">
-                                <button
-                                    onClick={() => {
-                                        setActive(item.name)
-                                        if (item.name === "Kurslar") setOpenCourses(!openCourses)
-                                        else setOpenCourses(false)
-                                    }}
-                                    className={`flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full
-                    ${active === item.name ? "bg-[#e4b75a] text-black shadow-md" : "hover:bg-[#0b1728]/60 text-white"}`}
-                                >
-                                    <img src={item.icon} alt={item.name} className="w-6" />
-                                    {!isCollapsed && <span className="font-medium cursor-pointer">{item.name}</span>}
-                                </button>
+                        <div className="w-full">
+                            <button
+                                onClick={() => setOpenCourses(false)}
+                                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                            >
+                                <img src={begin} alt="Asosiy" className="w-6" />
+                                {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/mentor">Asosiy</Link></span>}
+                            </button>
+                        </div>
 
-                                {!isCollapsed && item.name === "Kurslar" && openCourses && (
-                                    <div className="ml-10 mt-2 space-y-2 text-sm text-white flex flex-col transition-all duration-200  justify-start items-start ">
-                                        <h1 onClick={() => setActive("kategoriya")} className={`font-semibold hover:underline cursor-pointer p-2 ${active === "kategoriya" ? "text-[#e4b75a] border border-[#e4b75a] rounded-2xl transition-all duration-200" : "text-[#fff]"}`} >
-                                            <Link to="/category_courses">Kategoriya</Link>
-                                        </h1>
+                        <div className="w-full">
+                            <button
+                                onClick={() => setOpenCourses(!openCourses)}
+                                className="flex items-center gap-4 p-3 border border-[#e4b75a] rounded-xl transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                            >
+                                <img src={learning} alt="Kurslar" className="w-6" />
+                                {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer">Kurslar</span>}
+                            </button>
 
-                                        <h1 onClick={() => setActive("kurslar")} className={`font-semibold hover:underline cursor-pointer p-2 ${active === "kurslar" ? "text-[#e4b75a] border border-[#e4b75a] rounded-2xl transition-all duration-200" : "text-[#fff]"}`}><Link to="/all_courses">Barcha kurslar</Link> </h1>
+                            {!isCollapsed && openCourses && (
+                                <div className="ml-10 mt-2 space-y-2 text-sm text-white flex flex-col transition-all duration-200 justify-start items-start ">
+                                    <h1 className="font-semibold hover:underline cursor-pointer p-2">
+                                        <Link to="/category_courses">Kategoriya</Link>
+                                    </h1>
+                                    <h1 className="font-semibold hover:underline text-[#e4b75a] cursor-pointer p-2">
+                                        <Link to="/all_courses">Barcha kurslar</Link>
+                                    </h1>
+                                </div>
+                            )}
+                        </div>
 
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+                        <div className="w-full ">
+                            <button
+                                onClick={() => setOpenCourses(false)}
+                                className="flex items-center gap-4 p-3  rounded-xl transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                            >
+                                <img src={comment} alt="Izohlar" className="w-6" />
+                                {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/comments">Izohlar</Link></span>}
+                            </button>
+                        </div>
+
+                        <div className="w-full">
+                            <button
+                                onClick={() => setOpenCourses(false)}
+                                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                            >
+                                <img src={off} alt="Chiqish" className="w-6" />
+                                {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/log_out">Chiqish</Link></span>}
+                            </button>
+                        </div>
                     </nav>
 
                     <div className="mt-auto">
@@ -120,7 +143,7 @@ export default function All_Courses() {
             </aside>
 
             <main className="flex-1 flex flex-col">
-                <header className="w-full bg-white  shadow-md px-6 py-3 flex items-center justify-between">
+                <header className="w-full bg-white shadow-md px-6 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <img src={tick} alt="logo" className="w-7" />
                         <h1 className="text-lg font-semibold text-gray-800">Mentor</h1>
@@ -157,32 +180,41 @@ export default function All_Courses() {
                 </header>
 
                 <section className="p-6 mt-5 overflow-auto">
-
-                    <div className='flex justify-between items-center' >
-                        <h1 className='text-3xl font-bold '>Kurslar</h1>
-                         <Button
-                           
+                    <div className='flex justify-between items-center'>
+                        <h1 className='text-3xl font-bold'>Kurslar</h1>
+                        <Button
                             variant="contained"
                             sx={{
-                                backgroundColor: "#e4b75a", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
-                                    backgroundColor: "#e4b75a",
-                                }
+                                backgroundColor: "#e4b75a",
+                                borderRadius: "10px",
+                                padding: "12px 20px",
+                                fontWeight: "bold",
+                                textTransform: "none",
+                                "&:hover": { backgroundColor: "#e4b75a" }
                             }}
                         >
-                             + Qoshish
+                            + Qoshish
                         </Button>
                     </div>
-                    <h1 className='text-2xl'>Kurslar <span>🟢</span> </h1>
+                    <h1 className='text-2xl'>Kurslar <span>🟢</span></h1>
 
                     <div className='flex gap-5 mt-8'>
-                        <input onChange={e => setSearch(e.target.value)} type="text" placeholder='izlash' className='border-2 border-[#e4b75a] py-3 px-3 rounded-2xl max-w-[500px] w-full' />
+                        <input
+                            onChange={e => setSearch(e.target.value)}
+                            type="text"
+                            placeholder='izlash'
+                            className='border-2 border-[#e4b75a] py-3 px-3 rounded-2xl max-w-[500px] w-full'
+                        />
                         <Button
                             onClick={Search}
                             variant="contained"
                             sx={{
-                                backgroundColor: "#e4b75a", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": {
-                                    backgroundColor: "#e4b75a",
-                                }
+                                backgroundColor: "#e4b75a",
+                                borderRadius: "10px",
+                                padding: "12px 20px",
+                                fontWeight: "bold",
+                                textTransform: "none",
+                                "&:hover": { backgroundColor: "#e4b75a" }
                             }}
                         >
                             Kirish
@@ -205,9 +237,9 @@ export default function All_Courses() {
                             </tr>
                         </thead>
                         <tbody>
-                            {paginatedData.map((item) => (
+                            {paginatedData.map((item, idx) => (
                                 <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="py-4 px-8 border-b">{1}</td>
+                                    <td className="py-4 px-8 border-b">{idx + 1}</td>
                                     <td className="py-4 px-8 border-b">
                                         <img src={`https://fn3.fixoo.uz/uploads/banner/${item.banner}`} alt="banner" className="w-16 h-10 object-contain" />
                                     </td>
@@ -233,14 +265,11 @@ export default function All_Courses() {
                                             <button className="text-red-500 hover:underline">---</button>
                                         </div>
                                     </td>
-
                                 </tr>
                             ))}
                         </tbody>
                     </table>
 
-
-                    {/* Pagination */}
                     <div className="flex justify-between items-center mt-8 text-gray-600 text-lg">
                         <div className="flex items-center gap-4">
                             <span>Rows per page:</span>
@@ -261,7 +290,6 @@ export default function All_Courses() {
                                 {Math.min(startIndex + rowsPerPage, filtered.length)} of {filtered.length}
                             </span>
                         </div>
-
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setPage((p) => Math.max(p - 1, 1))}
@@ -279,10 +307,6 @@ export default function All_Courses() {
                             </button>
                         </div>
                     </div>
-
-
-
-
                 </section>
             </main>
         </div>

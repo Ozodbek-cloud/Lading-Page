@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import login from "../../img/login.png"
 import { Alert, Button, Snackbar } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,19 +11,32 @@ export default function Log() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
   const navigate = useNavigate()
+
+ 
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      navigate("/mentor") 
+    } else {
+      navigate("/log")
+    }
+  }, [navigate])
+
   async function post() {
     try {
       let res = await axios.post('https://fn3.fixoo.uz/auth/login', {
         phone: phone,
         password: pass
       })
-      console.log(res)
-      setSuccess(true)
-      setError(false)
-      if (res.status == 201 && res.data.user.role === 'MENTOR') {
+      if (res.status === 201 && res.data.user.role === 'MENTOR') {
+        localStorage.setItem("token", res.data.tokens.access_token)
+
+        setSuccess(true)
+        setError(false)
+
         navigate("/mentor")
       } else {
-        setError(false)
+        setError(true)
       }
     } catch (err) {
       console.error(err)
@@ -31,7 +44,6 @@ export default function Log() {
       setSuccess(false)
     }
   }
-
 
   return (
     <div className="flex h-screen">
@@ -46,7 +58,6 @@ export default function Log() {
 
         <div className="w-[300px] flex flex-col gap-5">
           <h1 className='font-bold text-2xl text-center'>Kirish</h1>
-
 
           {error && (
             <Alert severity="error" onClose={() => setError(false)}>
@@ -92,7 +103,6 @@ export default function Log() {
           </div>
         </div>
       </div>
-
 
       <Snackbar
         open={success}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import left_arrow from "../../img/left-arrow.png"
 import begin from "../../img/begin.png"
 import learning from "../../img/learning.png"
@@ -10,27 +10,15 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import SettingsIcon from '@mui/icons-material/Settings'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
-import { Badge, Avatar, Button } from '@mui/material'
+import { Badge, Avatar } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
-export default function Category_Courses() {
+export default function Comment() {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [darkMode, setDarkMode] = useState(false)
     const [notifCount, setNotifCount] = useState(3)
     const [openCourses, setOpenCourses] = useState(false)
-    const [search, setSearch] = useState("")
-    const [filtered, setFiltered] = useState([])
-    const [category, setCategory] = useState([])
     const navigate = useNavigate()
-
-    useEffect(() => {
-        axios.get('https://fn3.fixoo.uz/course-category/getAll').then(data => {
-            setCategory(data.data)
-            setFiltered(data.data)
-        })
-    }, [])
-
     useEffect(() => {
         let token = localStorage.getItem("token")
         if (!token) {
@@ -38,19 +26,36 @@ export default function Category_Courses() {
         }
     }, [navigate])
 
-    const [rowsPerPage, setRowsPerPage] = useState(5)
-    const [page, setPage] = useState(1)
+    const [newComment, setNewComment] = useState("")
+    const [comments, setComments] = useState([
+        "Frontend juda yaxshi chiqqan!",
+        "Backend qismini ham ko‘rishni xohlayman.",
+        "Dark mode zo‘r ishlayapti.",
+        "Pagination qo‘shilgani qulay bo‘libdi.",
+        "EduNite dizayni chiroyli.",
+        "Kurslar bo‘limi to‘liq ishlayaptimi?",
+        "Asosiy sahifa minimalistik ekan.",
+        "Collapse menu yaxshi g‘oya.",
+        "Mentor profili ham chiroyli chiqibdi.",
+        "Izohlar bo‘limi nihoyat qo‘shilibdi!"
+    ])
 
-    const totalPages = Math.ceil(category.length / rowsPerPage)
-    const startIndex = (page - 1) * rowsPerPage
-    const paginatedData = filtered.slice(startIndex, startIndex + rowsPerPage)
+    useEffect(() => {
+        const saved = localStorage.getItem("comments")
+        if (saved) {
+            setComments(JSON.parse(saved))
+        }
+    }, [])
 
-    function Search(e) {
-        e.preventDefault()
-        const result = category.filter(el =>
-            el.name.toLowerCase().includes(search.toLowerCase())
-        )
-        setFiltered(result)
+    useEffect(() => {
+        localStorage.setItem("comments", JSON.stringify(comments))
+    }, [comments])
+
+    const handleAddComment = () => {
+        if (newComment.trim() !== "") {
+            setComments([newComment, ...comments])
+            setNewComment("")
+        }
     }
 
     return (
@@ -92,17 +97,17 @@ export default function Category_Courses() {
                         <div className="w-full">
                             <button
                                 onClick={() => setOpenCourses(!openCourses)}
-                                className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
                             >
                                 <img src={learning} alt="Kurslar" className="w-6" />
-                                {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer">Kurslar</span>}
+                                {!isCollapsed && <span className="font-medium cursor-pointer">Kurslar</span>}
                             </button>
                             {!isCollapsed && openCourses && (
                                 <div className="ml-10 mt-2 space-y-2 text-sm text-white flex flex-col">
-                                    <h1 className="font-semibold text-[#e4b75a] cursor-pointer p-2 hover:text-[#e4b75a]">
+                                    <h1 className="font-semibold cursor-pointer p-2">
                                         <Link to="/category_courses">Kategoriya</Link>
                                     </h1>
-                                    <h1 className="font-semibold cursor-pointer p-2 hover:text-[#e4b75a]">
+                                    <h1 className="font-semibold cursor-pointer p-2">
                                         <Link to="/all_courses">Barcha kurslar</Link>
                                     </h1>
                                 </div>
@@ -112,10 +117,10 @@ export default function Category_Courses() {
                         <div className="w-full">
                             <button
                                 onClick={() => setOpenCourses(false)}
-                                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                                className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
                             >
                                 <img src={comment} alt="Izohlar" className="w-6" />
-                                {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/comments">Izohlar</Link></span>}
+                                {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer"><Link to="/comments">Izohlar</Link></span>}
                             </button>
                         </div>
 
@@ -171,53 +176,29 @@ export default function Category_Courses() {
                 </header>
 
                 <section className="p-6 mt-5 overflow-auto">
-                    <h1 className='text-3xl font-bold'>KategoryaLar</h1>
-                    <h1 className='text-2xl'>Fodalanuvchilar <span>🟢</span> Kategorylar</h1>
-                    <div className='flex gap-5 mt-8'>
-                        <input onChange={e => setSearch(e.target.value)} type="text" placeholder='izlash' className='border-2 border-[#e4b75a] py-3 px-3 rounded-2xl max-w-[500px] w-full' />
-                        <Button onClick={Search} variant="contained" sx={{ backgroundColor: "#e4b75a", borderRadius: "10px", padding: "12px 20px", fontWeight: "bold", textTransform: "none", "&:hover": { backgroundColor: "#e4b75a" } }}>
-                            Kirish
-                        </Button>
+                    <h1 className='text-3xl font-bold mb-5'>Izohlar</h1>
+
+                    <div className="flex flex-col gap-4 mb-6">
+                        <textarea
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Izoh yozing..."
+                            className="border rounded-lg p-3 w-full h-28 resize-none"
+                        />
+                        <button
+                            onClick={handleAddComment}
+                            className="bg-[#e4b75a] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#d3a949] transition"
+                        >
+                            Izoh qo‘shish
+                        </button>
                     </div>
-                    <table className="w-full border-collapse text-xl mt-10">
-                        <thead>
-                            <tr className="bg-gray-100">
-                                <th className="text-left py-4 px-8 border-b">TR</th>
-                                <th className="text-left py-4 px-8 border-b">Kategoriya</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {paginatedData.map((item) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="py-4 px-8 border-b">{item.id}</td>
-                                    <td className="py-4 px-8 border-b">{item.name}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <div className="flex justify-between items-center mt-8 text-gray-600 text-lg">
-                        <div className="flex items-center gap-4">
-                            <span>Rows per page:</span>
-                            <select
-                                value={rowsPerPage}
-                                onChange={(e) => {
-                                    setRowsPerPage(Number(e.target.value))
-                                    setPage(1)
-                                }}
-                                className="border rounded px-4 py-2"
-                            >
-                                <option value={5}>5</option>
-                                <option value={10}>10</option>
-                                <option value={20}>20</option>
-                            </select>
-                            <span>
-                                {startIndex + 1}–{Math.min(startIndex + rowsPerPage, filtered.length)} of {filtered.length}
-                            </span>
-                        </div>
-                        <div className="flex gap-3">
-                            <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1} className="px-4 py-2 border rounded disabled:opacity-50">{"<"}</button>
-                            <button onClick={() => setPage((p) => Math.min(p + 1, totalPages))} disabled={page === totalPages} className="px-4 py-2 border rounded disabled:opacity-50">{">"}</button>
-                        </div>
+
+                    <div className="space-y-4">
+                        {comments.map((cmt, i) => (
+                            <div key={i} className="p-4 border rounded-lg shadow-sm bg-white">
+                                <p className="text-gray-800 text-lg">{cmt}</p>
+                            </div>
+                        ))}
                     </div>
                 </section>
             </main>
