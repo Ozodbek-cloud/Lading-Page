@@ -12,6 +12,7 @@ import All_Courses from './Mentor/All_courses/All_courses'
 import Comment from './Mentor/Comment/Comment'
 import Log_out from './Mentor/Log_Out/log_out'
 import NotFound from './Home/NotFound/NotFound'
+import Profile from './Mentor/Profile/Profile'
 export default function App() {
   return (
     <Router>
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/comments" element={<Comment />} />
           <Route path="/log_out" element={<Log_out />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/profile" element={<Profile/>} />
 
         </Routes>
       </Router>

@@ -10,18 +10,31 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import SettingsIcon from '@mui/icons-material/Settings'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
-import { Badge, Avatar, Button } from '@mui/material'
+import { Badge, Avatar, Button, TextField } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 
-export default function Log_Out() {
+export default function Profile() {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [darkMode, setDarkMode] = useState(false)
     const [notifCount, setNotifCount] = useState(3)
     const [openCourses, setOpenCourses] = useState(false)
-    const [pos, setPos] = useState({ top: "50%", left: "50%" })
+    const [active, setActive] = useState("shaxsiy");
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const dropdownRef = useRef(null)
     const navigate = useNavigate()
+
+    const buttonStyle = {
+        backgroundColor: "#ffffff",
+        color: "#e4b75a",
+        border: "2px solid #e4b75a",
+        borderRadius: "16px",
+        padding: "12px 24px",
+        fontWeight: "bold",
+        textTransform: "none",
+        "&:hover": {
+            backgroundColor: "#fdf7ec",
+        },
+    }
 
     function moveButton() {
         const randomTop = Math.floor(Math.random() * 80) + 10
@@ -45,7 +58,7 @@ export default function Log_Out() {
     }, [])
 
     return (
-        <div className={`${darkMode ? "bg-[#101828]" : ""} h-screen flex bg-gray-50`}>
+        <div className={`bg-[#f0f1f3] ${darkMode ? "bg-[#101828]" : ""} h-screen flex bg-gray-50`}>
             {/* Sidebar */}
             <aside className={`${isCollapsed ? "w-[80px]" : "w-[300px]"} transition-all duration-300`}>
                 <div className="bg-[#0f172a] text-white flex flex-col gap-6 p-4 h-full shadow-lg">
@@ -114,10 +127,10 @@ export default function Log_Out() {
                         <div className="w-full">
                             <button
                                 onClick={() => setOpenCourses(false)}
-                                className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
+                                className="flex items-center gap-4 p-3 rounded-xl  transition-all duration-200 w-full hover:bg-[#0b1728]/60 text-white"
                             >
                                 <img src={off} alt="Chiqish" className="w-6" />
-                                {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer"><Link to="/log_out">Chiqish</Link></span>}
+                                {!isCollapsed && <span className="font-medium  cursor-pointer"><Link to="/log_out">Chiqish</Link></span>}
                             </button>
                         </div>
                     </nav>
@@ -179,30 +192,84 @@ export default function Log_Out() {
                     </div>
                 </header>
 
-                <section className="p-6 mt-5 flex justify-center">
-                    <div className='justify-center flex flex-col'>
-                        <h1 className="text-5xl font-bold text-red-700 mb-6 animate-blink">
-                            Chiqish
-                        </h1>
+                <section className="p-6 mt-5 flex justify-start flex-col gap-10">
+                    <div>
+                        <h1 className='font-bold text-3xl'>Shaxshiy Ma'lumotlar</h1>
+                    </div>
+                    <div className='flex'>
+                        <div className="flex flex-col md:flex-row gap-8">
+                            {/* Chap panel tugmalar */}
+                            <div className="flex flex-col text-center gap-5 justify-start">
+                                <Button sx={buttonStyle} onClick={() => setActive("shaxsiy")}>
+                                    Shaxsiy Ma'lumotlar
+                                </Button>
+                                <Button sx={buttonStyle} onClick={() => setActive("profil")}>
+                                    Profilni o'zgartirish
+                                </Button>
+                                <Button sx={buttonStyle} onClick={() => setActive("parol")}>
+                                    Parolni o'zgartirish
+                                </Button>
+                                <Button sx={buttonStyle} onClick={() => setActive("telefon")}>
+                                    Telefonni o'zgartirish
+                                </Button>
+                                <Button sx={buttonStyle} onClick={() => setActive("qurilmalar")}>
+                                    Qurilmalar
+                                </Button>
+                            </div>
 
-                        <Button
-                            onClick={log_out}
-                            variant="contained"
-                            onMouseEnter={moveButton}
-                            sx={{
-                                position: "absolute",
-                                top: pos.top,
-                                left: pos.left,
-                                backgroundColor: "red",
-                                borderRadius: "10px",
-                                padding: "12px 40px",
-                                fontWeight: "bold",
-                                textTransform: "none",
-                                transition: "top 0.3s, left 0.3s",
-                            }}
-                        >
-                            Log Out
-                        </Button>
+                            {/* O‘ng panel content */}
+                            <div className="flex-1 bg-white p-6 rounded-xl shadow-md">
+                                {active === "shaxsiy" && (
+                                    <div>
+                                        <h3 className="text-lg font-bold mb-4">Shaxsiy Ma'lumotlar</h3>
+                                        <p>Ism: Azizbek</p>
+                                        <p>Email: azizbek@example.com</p>
+                                    </div>
+                                )}
+
+                                {active === "profil" && (
+                                    <div>
+                                        <h3 className="text-lg font-bold mb-4">Profilni o‘zgartirish</h3>
+                                        <TextField label="Ism" fullWidth className="mb-4" />
+                                        <TextField label="Familiya" fullWidth className="mb-4" />
+                                        <Button variant="contained" sx={{ mt: 2, background: "#e4b75a" }}>
+                                            Saqlash
+                                        </Button>
+                                    </div>
+                                )}
+
+                                {active === "parol" && (
+                                    <div>
+                                        <h3 className="text-lg font-bold mb-4">Parolni o‘zgartirish</h3>
+                                        <TextField label="Eski Parol" type="password" fullWidth className="mb-4" />
+                                        <TextField label="Yangi Parol" type="password" fullWidth className="mb-4" />
+                                        <TextField label="Parolni Tasdiqlash" type="password" fullWidth className="mb-4" />
+                                        <Button variant="contained" sx={{ mt: 2, background: "#e4b75a" }}>
+                                            Yangilash
+                                        </Button>
+                                    </div>
+                                )}
+
+                                {active === "telefon" && (
+                                    <div>
+                                        <h3 className="text-lg font-bold mb-4">Telefonni o‘zgartirish</h3>
+                                        <TextField label="Eski Telefon Raqam" fullWidth className="mb-4" />
+                                        <TextField label="Yangi Telefon Raqam" fullWidth className="mb-4" />
+                                        <Button variant="contained" sx={{ mt: 2, background: "#e4b75a" }}>
+                                            Yangilash
+                                        </Button>
+                                    </div>
+                                )}
+
+                                {active === "qurilmalar" && (
+                                    <div>
+                                        <h3 className="text-lg font-bold mb-4">Qurilmalar</h3>
+                                        <p>Oxirgi kirilgan qurilmalar ro‘yxati shu yerda chiqadi.</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div></div>
                     </div>
                 </section>
             </main>

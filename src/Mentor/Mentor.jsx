@@ -12,20 +12,25 @@ import DarkModeIcon from '@mui/icons-material/DarkMode'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import { Badge, Avatar } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 export default function Mentor() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
   const [notifCount, setNotifCount] = useState(3)
   const [openCourses, setOpenCourses] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   const navigate = useNavigate()
+  const [courses, setCourses] = useState([])
 
   useEffect(() => {
     let token = localStorage.getItem("token")
-    if (!token) {
-      navigate("/log")
-    }
+    if (!token) navigate("/log")
   }, [navigate])
+
+  useEffect(() => {
+    axios.get('https://fn3.fixoo.uz/courses').then(data => setCourses(data.data.data))
+  }, [])
 
   return (
     <div className={`${darkMode ? "bg-[#101828]" : ""} h-screen flex bg-gray-50`}>
@@ -38,41 +43,21 @@ export default function Mentor() {
                 <h1 className="text-2xl font-bold">Edu<span className="text-[#e4b75a]">Nite</span></h1>
               </div>
             )}
-            <img
-              src={left_arrow}
-              alt="toggle"
-              className={`w-7 cursor-pointer transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`}
-              onClick={() => setIsCollapsed(!isCollapsed)}
-            />
+            <img src={left_arrow} alt="toggle" className={`w-7 cursor-pointer transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`} onClick={() => setIsCollapsed(!isCollapsed)} />
           </div>
-
-          {!isCollapsed && (
-            <div className="p-2 border rounded-2xl text-center bg-[#0b1220]/30">
-              <h2 className="text-sm tracking-wider">BOSHQARUV PANELI</h2>
-            </div>
-          )}
-
+          {!isCollapsed && <div className="p-2 border rounded-2xl text-center bg-[#0b1220]/30"><h2 className="text-sm tracking-wider">BOSHQARUV PANELI</h2></div>}
           <nav className="flex flex-col gap-2 mt-2">
-
             <div className="w-full ">
-              <button
-                onClick={() => setOpenCourses(false)}
-                className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
-              >
+              <button onClick={() => setOpenCourses(false)} className="flex items-center gap-4 p-3 rounded-xl border border-[#e4b75a] transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white">
                 <img src={begin} alt="Asosiy" className="w-6" />
                 {!isCollapsed && <span className="font-medium text-[#e4b75a] cursor-pointer">Asosiy</span>}
               </button>
             </div>
-
             <div className="w-full">
-              <button
-                onClick={() => setOpenCourses(!openCourses)}
-                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
-              >
+              <button onClick={() => setOpenCourses(!openCourses)} className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white">
                 <img src={learning} alt="Kurslar" className="w-6" />
                 {!isCollapsed && <span className="font-medium cursor-pointer">Kurslar</span>}
               </button>
-
               {!isCollapsed && openCourses && (
                 <div className="ml-10 mt-2 space-y-2 text-sm text-white flex flex-col transition-all duration-200">
                   <Link to="/category_courses" className="font-semibold hover:underline cursor-pointer p-2">Kategoriya</Link>
@@ -80,95 +65,70 @@ export default function Mentor() {
                 </div>
               )}
             </div>
-
             <div className="w-full">
-              <button
-                onClick={() => setOpenCourses(false)}
-                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
-              >
+              <button onClick={() => setOpenCourses(false)} className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white">
                 <img src={comment} alt="Izohlar" className="w-6" />
                 {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/comments">Izohlar</Link></span>}
               </button>
             </div>
-
             <div className="w-full">
-              <button
-                onClick={() => setOpenCourses(false)}
-                className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white"
-              >
+              <button onClick={() => setOpenCourses(false)} className="flex items-center gap-4 p-3 rounded-xl transition-all duration-200 focus:outline-none w-full hover:bg-[#0b1728]/60 text-white">
                 <img src={off} alt="Chiqish" className="w-6" />
                 {!isCollapsed && <span className="font-medium cursor-pointer"><Link to="/log_out">Chiqish</Link></span>}
               </button>
             </div>
-
           </nav>
-
           <div className="mt-auto">
             <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#0b1728]/60 transition cursor-pointer">
               <PhoneInTalkIcon />
-              {!isCollapsed && <div>
-                <div className="text-sm font-semibold">Support</div>
-                <div className="text-xs text-gray-300">+998 90 000 00 00</div>
-              </div>}
+              {!isCollapsed && <div><div className="text-sm font-semibold">Support</div><div className="text-xs text-gray-300">+998 90 000 00 00</div></div>}
             </div>
           </div>
         </div>
       </aside>
-
       <main className="flex-1 flex flex-col">
         <header className="w-full bg-white border-b shadow-sm px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src={tick} alt="logo" className="w-7" />
             <h1 className="text-lg font-semibold text-gray-800">Mentor</h1>
           </div>
-
-          <div className="flex items-center gap-4">
-            <div
-              className="cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition flex items-center"
-              title="Notifications"
-              onClick={() => setNotifCount(0)}
-            >
-              <Badge badgeContent={notifCount} color="error">
-                <NotificationsIcon fontSize="medium" />
-              </Badge>
+          <div className="flex items-center gap-4 relative">
+            <div className="cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition flex items-center" onClick={() => setNotifCount(0)}>
+              <Badge badgeContent={notifCount} color="error"><NotificationsIcon fontSize="medium" /></Badge>
             </div>
-            <div className="cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition" title="Settings">
-              <SettingsIcon fontSize="medium" />
-            </div>
-            <div
-              className="cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition flex items-center"
-              title="Toggle dark mode"
-              onClick={() => setDarkMode((s) => !s)}
-            >
-              <DarkModeIcon fontSize="medium" />
-            </div>
-            <div className="flex items-center gap-3 bg-gray-50 px-3 py-1 rounded-xl hover:shadow-md transition cursor-pointer">
-              <Avatar src={logo} alt="avatar" />
-              <div className="hidden sm:flex flex-col">
-                <span className="font-semibold text-sm">Ozodbek Nasriddinov</span>
-                <span className="text-xs text-gray-500">MENTOR</span>
+            <div className="cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition"><SettingsIcon fontSize="medium" /></div>
+            <div className="cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition flex items-center" onClick={() => setDarkMode((s) => !s)}><DarkModeIcon fontSize="medium" /></div>
+            <div className="relative">
+              <div onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center gap-3 bg-gray-50 px-3 py-1 rounded-xl hover:shadow-md transition cursor-pointer">
+                <Avatar src={logo} alt="avatar" />
+                <div className="hidden sm:flex flex-col">
+                  <span className="font-semibold text-sm">Ozodbek Nasriddinov</span>
+                  <span className="text-xs text-gray-500">MENTOR</span>
+                </div>
               </div>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border py-2 z-50">
+                  <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</Link>
+                  <Link to="/log_out" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Chiqish</Link>
+                </div>
+              )}
             </div>
           </div>
         </header>
-
         <section className="p-6 overflow-auto">
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-4">
               <h3 className="text-xl font-bold">Kurslar Statistikasi</h3>
-              <p className="text-gray-500">Umumiy kurslar: 12</p>
-              <p className="text-gray-500">Aktiv kurslar: 9</p>
+              <p className="text-gray-500">Umumiy kurslar: {courses.length}</p>
+              <p className="text-gray-500">Aktiv kurslar: {courses.filter(e => e.published == true).length}</p>
               <p className="text-gray-500">Tugallangan kurslar: 3</p>
             </div>
-
             <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-4">
               <h3 className="text-xl font-bold">Foydalanuvchilar Faoliyati</h3>
               <p className="text-gray-500">Yangi registratsiyalar: 15</p>
               <p className="text-gray-500">Aktiv foydalanuvchilar: 42</p>
               <p className="text-gray-500">Bugungi loginlar: 27</p>
             </div>
-
             <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col gap-4">
               <h3 className="text-xl font-bold">So‘nggi Vazifalar</h3>
               <p className="text-gray-500">Foydalanuvchi X registratsiyadan o‘tdi</p>
@@ -176,7 +136,6 @@ export default function Mentor() {
               <p className="text-gray-500">Komment Z qo‘shildi</p>
             </div>
           </div>
-
         </section>
       </main>
     </div>

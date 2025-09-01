@@ -18,6 +18,8 @@ export default function Comment() {
     const [darkMode, setDarkMode] = useState(false)
     const [notifCount, setNotifCount] = useState(3)
     const [openCourses, setOpenCourses] = useState(false)
+    const [dropdownOpen, setDropdownOpen] = useState(false)
+
     const navigate = useNavigate()
     useEffect(() => {
         let token = localStorage.getItem("token")
@@ -165,12 +167,20 @@ export default function Comment() {
                         <div className="cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition flex items-center" onClick={() => setDarkMode((s) => !s)}>
                             <DarkModeIcon fontSize="medium" />
                         </div>
-                        <div className="flex items-center gap-3 bg-gray-50 px-3 py-1 rounded-xl hover:shadow-md transition cursor-pointer">
-                            <Avatar src={logo} alt="avatar" />
-                            <div className="hidden sm:flex flex-col">
-                                <span className="font-semibold text-sm">Ozodbek Nasriddinov</span>
-                                <span className="text-xs text-gray-500">MENTOR</span>
+                        <div className="relative">
+                            <div onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center gap-3 bg-gray-50 px-3 py-1 rounded-xl hover:shadow-md transition cursor-pointer">
+                                <Avatar src={logo} alt="avatar" />
+                                <div className="hidden sm:flex flex-col">
+                                    <span className="font-semibold text-sm">Ozodbek Nasriddinov</span>
+                                    <span className="text-xs text-gray-500">MENTOR</span>
+                                </div>
                             </div>
+                            {dropdownOpen && (
+                                <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border py-2 z-50">
+                                    <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</Link>
+                                    <Link to="/log_out" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Chiqish</Link>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </header>
